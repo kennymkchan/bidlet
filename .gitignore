@@ -1,0 +1,6 @@
+db.sqlite3
+node_modules/
+/bidlet/__pycache__/
+/api/__pycache__/
+webpack-stats.json
+src/client/public/
