@@ -4,6 +4,7 @@ node_modules/
 /api/__pycache__/
 webpack-stats.json
 src/client/public/
+/bidlet/settings.py
 /bidlet/include
 /bidlet/Lib
 /bidlet/Scripts
