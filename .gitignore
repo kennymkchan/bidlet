@@ -4,3 +4,8 @@ node_modules/
 /api/__pycache__/
 webpack-stats.json
 src/client/public/
+/bidlet/include
+/bidlet/Lib
+/bidlet/Scripts
+/bidlet/tcl
+/bidlet/pip-selfcheck.json
