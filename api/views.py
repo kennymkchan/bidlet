@@ -48,12 +48,13 @@ class searchListings(APIView):
     		q_list = [Q(x) for x in predicates]
     		listings = Property.objects.filter(reduce(operator.and_, q_list))
     		search = predicates
-		context = {
+    	context = {
 			'listings': listings,
-			'CreatePropertyForm':CreatePropertyForm(),
+			'CreatePropertyForm':CreatePropertyForm,
 			'SearchPropertyForm': SearchPropertyForm,
 			'search':search
 		}
+
     	return Response(context)
 
 def createBid(request, propertyID=None):
@@ -119,10 +120,10 @@ class propertyDetails(APIView):
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
         form = BidForm(request.POST) #, bidPrice=bidding.CurPrice
-		context = {
+        context = {
 			'property': property,
 			'bidding': bidding,
 			'bidders': bidders,
 			'form': form
 		}
-        return Response()
+        return Response(context)
