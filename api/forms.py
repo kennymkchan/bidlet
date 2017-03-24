@@ -5,18 +5,6 @@ from datetime import *
 class BidForm(forms.Form):
 	bidPrice = forms.DecimalField(label="Your Bid Price", max_digits=8, decimal_places=2)
 
-	# def __init__(self, *args, **kwargs):
-	# 	print("...........dsdds")
-	# 	print(kwargs)
-	# 	self.curPrice = kwargs.get('curPrice')
-	# 	super(BidForm, self).__init__(*args, **kwargs)  # and carry on to init the form
-
-	# def clean_bidPrice(self):
-	# 	bid = self.cleaned_data['bidPrice']
-	# 	if bid < self.curPrice:
-	# 		raise forms.ValidationError("Please raise your bid above current price.")
-	# 	return bid
-
 class CreatePropertyForm(forms.Form):
 	title = forms.CharField(initial="4 Room suite sublet for FALL 2017")
 	description = forms.CharField(initial="Best place ever")

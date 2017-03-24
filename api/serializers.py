@@ -1,16 +1,17 @@
 from rest_framework import serializers
 
-from .models import Bidlet, Property, Bidding, Bidders
-
-class BidletSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Bidlet
-		fields = ('property', 'owner')
+from .models import Property, Bidding, Bidders
 
 class PropertySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Property
-		fields = ('propertyID','title', 'description', 'ownerID', 'address', 'country', 'city', 'postalCode', 'suite', 'image', 'startPrice', 'biddingID')
+		fields = (
+			'propertyID',
+			'title',
+			'description',
+			'ownerID',
+			'address',
+			'country', 'city', 'postalCode', 'suite', 'image', 'startPrice', 'biddingID')
 
 class BiddingSerializer(serializers.ModelSerializer):
 	class Meta:
