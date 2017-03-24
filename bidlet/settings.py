@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = 'wm(mm02ktc%wk00+(t##1^e*@fg^@9z01wm*##zego)w*zn($'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'webpack_loader',
-    'api',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -78,24 +78,24 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
     },
-    # Add production enviroment here
-    'staging': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '####',
-        'USER': '####', # will need to change
-        'PASSWORD': '####', # probably want to keep the password file in a separate document
-        'HOST': '####',
-        'PORT': '####',
-    },
-    # Add production enviroment here
-    'production': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '####',
-        'USER': '####',
-        'PASSWORD': '####', # probably want to keep the password file in a separate document
-        'HOST': '####',
-        'PORT': '####',
-    }
+    # # Add production enviroment here
+    # 'staging': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': '####',
+    #     'USER': '####', # will need to change
+    #     'PASSWORD': '####', # probably want to keep the password file in a separate document
+    #     'HOST': '####',
+    #     'PORT': '####',
+    # },
+    # # Add production enviroment here
+    # 'production': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': '####',
+    #     'USER': '####',
+    #     'PASSWORD': '####', # probably want to keep the password file in a separate document
+    #     'HOST': '####',
+    #     'PORT': '####',
+    # }
 }
 
 
