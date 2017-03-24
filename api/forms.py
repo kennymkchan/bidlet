@@ -6,6 +6,7 @@ class BidForm(forms.Form):
 	bidPrice = forms.DecimalField(label="Your Bid Price", max_digits=8, decimal_places=2)
 
 class CreatePropertyForm(forms.Form):
+	# TODO: Remove the initial
 	title = forms.CharField(initial="4 Room suite sublet for FALL 2017")
 	description = forms.CharField(initial="Best place ever")
 	address = forms.CharField(initial="200 University ave")

@@ -48,32 +48,47 @@ class searchListings(APIView):
     		q_list = [Q(x) for x in predicates]
     		listings = Property.objects.filter(reduce(operator.and_, q_list))
     		search = predicates
-    	return Response({'listings': listings, 'CreatePropertyForm':CreatePropertyForm() , 'SearchPropertyForm': SearchPropertyForm, 'search':search})
+		context = {
+			'listings': listings,
+			'CreatePropertyForm':CreatePropertyForm(),
+			'SearchPropertyForm': SearchPropertyForm,
+			'search':search
+		}
+    	return Response(context)
 
 def createBid(request, propertyID=None):
+	# Might consider to use filter(propertyID=propertyID).first
 	bid = Bidding.objects.get(propertyID=propertyID)
-	form = BidForm(request.POST)
+	form = BidForm(request.POST or None)
 	if form.is_valid():
 		bidPrice = form.cleaned_data['bidPrice']
-		# TODO: MAKE UserID DYNAMIC
 
+		# see if the user is authenticated. If they are, take their ID
 		user = request.user
-		print(user.id)
 		if user.is_authenticated:
 			userID = user.id
+		else:
+			# fail safe
+			userID = 1
 
 		biddingID = bid.biddingID
 
 		bid = Bidders.objects.create(userID=userID, bidPrice=bidPrice, biddingID=biddingID)
 		Bidding.objects.filter(biddingID=biddingID).update(CurPrice=bid.bidPrice)
+
+	# Might want to use redirect() here instead
 	return HttpResponseRedirect('/property/'+ str(propertyID))
 
 def createProperty(request):
 	form = CreatePropertyForm(request.POST or None)
 
+	# see if the user is authenticated. If they are, take their ID
 	user = request.user
 	if user.is_authenticated:
 		ownerID = user.id
+	else:
+		# fail safe
+		ownerID = 1
 
 	title = form.cleaned_data['title']
 	description = form.cleaned_data['description']
@@ -91,6 +106,8 @@ def createProperty(request):
 		country=country, city=city, postalCode=postalCode, suite=suite, image=image, startPrice=startPrice)
 	bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice,
 		CurPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
+
+	# Might want to use redirect() here instead
 	return HttpResponseRedirect('/property/'+ str(newProp.propertyID))
 
 class propertyDetails(APIView):
@@ -102,4 +119,10 @@ class propertyDetails(APIView):
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
         form = BidForm(request.POST) #, bidPrice=bidding.CurPrice
-        return Response({'property': property, 'bidding': bidding, 'bidders': bidders, 'form': form})
+		context = {
+			'property': property,
+			'bidding': bidding,
+			'bidders': bidders,
+			'form': form
+		}
+        return Response()
