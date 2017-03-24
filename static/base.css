@@ -6,6 +6,12 @@ html, body {
 
 /***************** BASE BUTTON ********************/
 
+button {
+  outline: none;
+  background: none;
+  border:none;
+}
+
 .button:link,
 .button:visited,
 .button:hover,
@@ -14,11 +20,14 @@ html, body {
   text-decoration: none;
 }
 
-.button {
+.button,
+button {
   color: #fff;
+  display: inline-block;
   text-decoration: none;
   cursor: pointer;
-  width: 300px;
+  min-width: 90px;
+  text-align: center;
   background-color: #6aa74c;
   padding: 10px 30px;
   border-radius: 5px;
@@ -38,6 +47,10 @@ html, body {
 
 .center {
   text-align: center;
+}
+
+.gutter-bottom--large {
+  margin-bottom: 90px;
 }
 
 .gutter-bottom {

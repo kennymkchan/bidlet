@@ -1,12 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{title}}</h1>
+
+  <style>
+    .register-form-container {
+      text-align: center;
+    }
+
+    .button--register {
+      text-align: center;
+      width: 150px;
+      text-transform: uppercase;
+    }
+  </style>
+
+
+  <div class="register-form-container">
+    <h1>{{title}}</h1>
     <form method="post">
       {% csrf_token %}
+
+      <!-- <label for="id_username">Username:</label>
+      <input id="id_username" maxlength="30" name="username" type="text">
+      <span class="helptext">Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.</span> -->
+
       {{ user_form.as_p }}
       {{ account_form.as_p }}
-      <button type="submit" value="{{title}}">Login</button>
+      <button class="button button--register" type="submit" value="{{title}}">Register</button>
     </form>
-  <br>
+  </div>
 {% endblock %}
