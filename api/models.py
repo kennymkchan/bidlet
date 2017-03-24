@@ -1,10 +1,5 @@
 from django.db import models
 
-class Bidlet(models.Model):
-	id = models.AutoField(primary_key=True)
-	property = models.CharField(max_length=200, unique=True)
-	owner = models.CharField(max_length=100)
-  
 class Property(models.Model):
 	propertyID = models.AutoField(primary_key=True)
 	title = models.CharField(max_length=200)
@@ -18,9 +13,9 @@ class Property(models.Model):
 	image = models.CharField(max_length=200)
 	startPrice = models.DecimalField(max_digits=8, decimal_places=2)
 	biddingID = models.IntegerField(blank=True, null=True)
-	availStart = models.DateTimeField()
-	availEnd = models.DateTimeField()
-	rooms = models.IntegerField()
+	availStart = models.DateTimeField(blank=True, null=True)
+	availEnd = models.DateTimeField(blank=True, null=True)
+	rooms = models.IntegerField(blank=True, null=True)
 
 class Bidding(models.Model):
 	biddingID = models.AutoField(primary_key=True)
@@ -35,4 +30,3 @@ class Bidders(models.Model):
 	biddingID = models.IntegerField()
 	userID = models.IntegerField()
 	bidPrice = models.DecimalField(max_digits=8, decimal_places=2)
-

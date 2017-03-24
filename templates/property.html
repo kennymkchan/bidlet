@@ -26,7 +26,7 @@
     <!-- 	{%block bidForm %}
 	{% endblock %} -->
     <h2>Bid Now</h2>
-    <form role="form" action="/api/bid/{{property.propertyID}}" method="post">
+    <form role="form" action="/bid/{{property.propertyID}}" method="post">
       {% csrf_token %}
       <label for="bidPrice">Your Bid Price: </label>
       <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}">

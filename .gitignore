@@ -13,3 +13,5 @@ src/client/public/
 logfile
 users/__pycache__/
 users/migrations/
+api/migrations/
+src/

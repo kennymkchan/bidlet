@@ -11,30 +11,12 @@ from functools import reduce
 
 from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
 
-from .models import Bidlet, Property, Bidding, Bidders
-from .serializers import BidletSerializer, PropertySerializer, BiddingSerializer, BiddersSerializer
-
-class BidletList(generics.ListCreateAPIView):
-	"""
-	API endpoint for listing and creating bid objects
-	"""
-	# queryset = Bidlet.objects.all()
-	# serializer_class = BidletSerializer
-	# print(queryset[0].id)
-	# print(queryset[0].property)
-	# print(queryset[0].owner)
-
-class UserList(generics.ListCreateAPIView):
+from .models import Property, Bidding, Bidders
+from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
 
 from django.shortcuts import render
 
-from .models import Bidlet
-from .serializers import BidletSerializer
 from django.contrib.auth.decorators import login_required
-
-class BidletList(generics.ListCreateAPIView):
-	queryset = Bidlet.objects.all()
-	serializer_class = BidletSerializer
 
 class Listings(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -43,12 +25,6 @@ class Listings(APIView):
     def get(self, request):
         listings = Property.objects.all()
         return Response({'listings': listings, 'CreatePropertyForm':CreatePropertyForm() , 'SearchPropertyForm': SearchPropertyForm})
-
-# def searchListings(request):
-# 	form = SearchPropertyForm(request.POST)
-# 	if form.is_valid():
-# 		bidPrice = form.cleaned_data['bidPrice']
-# 	return HttpResponseRedirect('/api/property/'+ str(propertyID))
 
 class searchListings(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -72,24 +48,49 @@ class searchListings(APIView):
     		q_list = [Q(x) for x in predicates]
     		listings = Property.objects.filter(reduce(operator.and_, q_list))
     		search = predicates
-    	return Response({'listings': listings, 'CreatePropertyForm':CreatePropertyForm() , 'SearchPropertyForm': SearchPropertyForm, 'search':search})
+    	context = {
+			'listings': listings,
+			'CreatePropertyForm':CreatePropertyForm,
+			'SearchPropertyForm': SearchPropertyForm,
+			'search':search
+		}
+
+    	return Response(context)
 
 def createBid(request, propertyID=None):
+	# Might consider to use filter(propertyID=propertyID).first
 	bid = Bidding.objects.get(propertyID=propertyID)
-	form = BidForm(request.POST)
-	print(form)
+	form = BidForm(request.POST or None)
 	if form.is_valid():
 		bidPrice = form.cleaned_data['bidPrice']
-		# TODO: MAKE UserID DYNAMIC
-		userID = 69
+
+		# see if the user is authenticated. If they are, take their ID
+		user = request.user
+		if user.is_authenticated:
+			userID = user.id
+		else:
+			# fail safe
+			userID = 1
+
 		biddingID = bid.biddingID
+
 		bid = Bidders.objects.create(userID=userID, bidPrice=bidPrice, biddingID=biddingID)
 		Bidding.objects.filter(biddingID=biddingID).update(CurPrice=bid.bidPrice)
-	return HttpResponseRedirect('/api/property/'+ str(propertyID))
+
+	# Might want to use redirect() here instead
+	return HttpResponseRedirect('/property/'+ str(propertyID))
 
 def createProperty(request):
-	form = CreatePropertyForm(request.POST)
-	print(form)
+	form = CreatePropertyForm(request.POST or None)
+
+	# see if the user is authenticated. If they are, take their ID
+	user = request.user
+	if user.is_authenticated:
+		ownerID = user.id
+	else:
+		# fail safe
+		ownerID = 1
+
 	title = form.cleaned_data['title']
 	description = form.cleaned_data['description']
 	address = form.cleaned_data['address']
@@ -102,14 +103,13 @@ def createProperty(request):
 	dateStart = form.cleaned_data['dateStart']
 	dateEnd = form.cleaned_data['dateEnd']
 
-	# TO DO: get userID
-	ownerID = 1
-
-	newProp = Property.objects.create(title= title, description=description, ownerID=ownerID, address=address, 
+	newProp = Property.objects.create(title= title, description=description, ownerID=ownerID, address=address,
 		country=country, city=city, postalCode=postalCode, suite=suite, image=image, startPrice=startPrice)
-	bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice, 
+	bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice,
 		CurPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
-	return HttpResponseRedirect('/api/property/'+ str(newProp.propertyID))
+
+	# Might want to use redirect() here instead
+	return HttpResponseRedirect('/property/'+ str(newProp.propertyID))
 
 class propertyDetails(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -120,4 +120,10 @@ class propertyDetails(APIView):
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
         form = BidForm(request.POST) #, bidPrice=bidding.CurPrice
-        return Response({'property': property, 'bidding': bidding, 'bidders': bidders, 'form': form})
+        context = {
+			'property': property,
+			'bidding': bidding,
+			'bidders': bidders,
+			'form': form
+		}
+        return Response(context)
