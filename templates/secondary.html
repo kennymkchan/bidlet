@@ -1,4 +1,3 @@
-{% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,7 +5,7 @@
     </head>
     <body>
         <div id="app">
-          {% render_bundle 'main' %}
+            <p>Hello {{ user.username }}!</p>
         </div>
     </body>
 </html>

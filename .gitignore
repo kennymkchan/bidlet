@@ -10,3 +10,6 @@ src/client/public/
 /bidlet/Scripts
 /bidlet/tcl
 /bidlet/pip-selfcheck.json
+logfile
+users/__pycache__/
+users/migrations/

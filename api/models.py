@@ -4,7 +4,7 @@ class Bidlet(models.Model):
 	id = models.AutoField(primary_key=True)
 	property = models.CharField(max_length=200, unique=True)
 	owner = models.CharField(max_length=100)
-
+  
 class Property(models.Model):
 	propertyID = models.AutoField(primary_key=True)
 	title = models.CharField(max_length=200)
@@ -35,7 +35,4 @@ class Bidders(models.Model):
 	biddingID = models.IntegerField()
 	userID = models.IntegerField()
 	bidPrice = models.DecimalField(max_digits=8, decimal_places=2)
-
-
-
 
