@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h2>Homepage</h2>
+
+  <p> {{account.user_id}} </p>
+
+  <p>Hello {{ user.first_name}}! </p>
+
+  <a href="/user/edit" class="button button--edit-profile">
+    Edit profile
+  </a>
+
+  <a href="/logout" class="button button--logout">
+    Logout
+  </a>
+{% endblock %}

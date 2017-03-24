@@ -1,0 +1,17 @@
+.navbar-container {
+  height: 60px;
+  line-height: 60px;
+}
+
+.nav-items {
+  width: 300px;
+  display: inline-block;
+  float: right;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: #5C5C5C;
+  font-size: 15px;
+  margin: 0px 20px;
+}

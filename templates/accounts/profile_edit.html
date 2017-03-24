@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+{% endblock %}
+
+
+{% block content %}
+  <h2>Welcome to profile edit!</h2>
+
+  <h3>Here, you can find the ability to edit your own account information</h3>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ accountEditForm.as_p }}
+    <button type="submit" value="{{title}}">Save</button>
+    <a href="/home"><button type="button" value="{{title}}">Return to Profile</button></a>
+  </form>
+
+
+{% endblock %}
