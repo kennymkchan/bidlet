@@ -23,11 +23,14 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', TemplateView.as_view(template_name='index.html')),
 
+    # Property Management
 	url(r'^search/', searchListings.as_view(), name='search-listings'),
 	url(r'^listings/', Listings.as_view(), name='listings'),
 	url(r'^property/(?P<id>\d{1,})/$', propertyDetails.as_view(), name='property'),
-	url(r'^bid/(?P<propertyID>\d{1,})', createBid, name='create-bid'),
 	url(r'^createProperty/', createProperty, name='create-property'),
+
+    # Budding Management
+    url(r'^bid/(?P<propertyID>\d{1,})', createBid, name='create-bid'),
 
     # Accounts
     url(r'^login/', login_view, name="login"),
