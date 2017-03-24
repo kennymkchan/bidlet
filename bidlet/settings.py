@@ -128,11 +128,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-# 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = (
-#     os.path.join(BASE_DIR, 'media'),
-# )
+# strip = sk_test_G5cg5ZCor1a4HOdWqPb57YxV
+# Successful card: 4242424242424242
+# Not successful card: 4000000000000077
+# PUblishable key: pk_test_B2Q087W7admtUPhm8hg2NyDO
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -202,8 +202,3 @@ LOGGING = {
         },
     }
 }
-
-if DEBUG:
-    # make all loggers use the console.
-    for logger in LOGGING['loggers']:
-        LOGGING['loggers'][logger]['handlers'] = ['console']

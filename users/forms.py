@@ -9,6 +9,8 @@ from datetime import date
 from django import forms
 from .models import Account
 
+import stripe
+
 User = get_user_model()
 
 class AccountLoginForm(forms.Form):
@@ -142,3 +144,11 @@ class AccountEditForm(forms.ModelForm):
             else:
                 raise forms.ValidationError("You must be older than 16 to use this site")
         return birthday
+
+class PaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = Account
+        fields = [
+            'stripe_id',
+        ]

@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.conf import settings
 
 from django.contrib.auth.models import User
 
@@ -13,14 +14,4 @@ class Account(models.Model):
     profile_description = models.CharField(max_length=255, blank=True, null=True)
     preferred_currency = models.CharField(max_length=4, blank=True, null=True)
     profile_image = models.FileField(blank=True, null=True)
-
-# Only need if I am planning to do triggers
-
-# @receiver(post_save, sender=User)
-# def create_user_account(sender, instance, created, **kwargs):
-#     if created:
-#         Account.objects.create(user=instance)
-#
-# @receiver(post_save, sender=User)
-# def save_user_account(sender, instance, **kwargs):
-#     instance.account.save()
+    stripe_id = models.CharField(max_length=30, blank=True, null=True)
