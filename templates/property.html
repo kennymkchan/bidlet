@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Property</title>
+</head>
+
+<body>
+  <h1>Property Details</h1>
+  <h2>{{ property.title}}</h2>
+  <div class="property">
+    <div class="property__image">
+      <img src="{{ property.image}}">
+    </div>
+    <span class="property__price">${{ bidding.CurPrice|default:bidding.startPrice}} CAD</span>
+    <div class="property__info">{{ property.city}}, {{ property.country }}</div>
+    <div class="property__info">{{ property.address }}</div>
+    <h2>Bidding</h2>
+    <div class="property__info">Current price: {{ bidding.CurPrice }}</div>
+    <div class="property__info">Owner: {{ bidding.ownerID }}</div>
+    <ul>
+      {% for bidder in bidders %}
+      <li>User({{ bidder.userID}}) bidded ${{ bidder.bidPrice }}</li>
+      {% endfor %}
+    </ul>
+    <!-- 	{%block bidForm %}
+	{% endblock %} -->
+    <h2>Bid Now</h2>
+    <form role="form" action="/api/bid/{{property.propertyID}}" method="post">
+      {% csrf_token %}
+      <label for="bidPrice">Your Bid Price: </label>
+      <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+<style type="text/css">
+.property {
+  width: 300px;
+  background-color: #fff;
+  margin: 0 5px;
+}
+
+.property__info {
+  color: #333;
+}
+
+.property__price {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.property__image {
+  width: 300px;
+  height: 250px;
+  margin-bottom: 10px;
+}
+
+.property__image img {
+  width: 100%;
+  height: 100%;
+}
+</style>
+
+</html>
