@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.db.models import Q
 import operator
 from functools import reduce
+from django.shortcuts import render, redirect
 
 from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
 
@@ -60,7 +61,7 @@ class searchListings(APIView):
 def createBid(request, propertyID=None):
 	# Might consider to use filter(propertyID=propertyID).first
 	bid = Bidding.objects.get(propertyID=propertyID)
-	form = BidForm(request.POST or None)
+	form = BidForm(request.POST or None, propID=bid.propertyID)
 	if form.is_valid():
 		bidPrice = form.cleaned_data['bidPrice']
 
@@ -68,8 +69,8 @@ def createBid(request, propertyID=None):
 		user = request.user
 		if user.is_authenticated:
 			userID = user.id
+		# fail safe
 		else:
-			# fail safe
 			userID = 1
 
 		biddingID = bid.biddingID
@@ -78,6 +79,10 @@ def createBid(request, propertyID=None):
 		Bidding.objects.filter(biddingID=biddingID).update(CurPrice=bid.bidPrice)
 
 	# Might want to use redirect() here instead
+    # Pass query string with the current implementation to make sure
+    # that validation error is returned. (Error if bid < currPrice + 10)
+
+    # Else, use `return render(request, 'template', context)`
 	return HttpResponseRedirect('/property/'+ str(propertyID))
 
 def createProperty(request):
@@ -119,7 +124,7 @@ class propertyDetails(APIView):
         property = Property.objects.get(propertyID=id)
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
-        form = BidForm(request.POST) #, bidPrice=bidding.CurPrice
+        form = BidForm(request.POST or None, propID=id) #, bidPrice=bidding.CurPrice
         context = {
 			'property': property,
 			'bidding': bidding,
