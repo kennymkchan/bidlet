@@ -25,7 +25,12 @@
     </ul>
     <h2>Bid Now</h2>
     {% if user.is_authenticated %}
-      {% if user.id == currentUser.userID %}
+      {% if account == None %}
+        <span>
+          No Credit Card Attached. Please update payments method
+          <a href="/user/payments">here</a>
+        </span>
+      {% elif user.id == currentUser.userID %}
         <p class="user--current-bid">You are currently the top bid!</p>
       {% else %}
         <form role="form" action="/bid/{{property.propertyID}}" method="post">
