@@ -1,2 +1,3 @@
+Thanks for using Bidlet!
 Welcome to the family, {{first_name}}
 You have signed up with the email address: {{email}}
