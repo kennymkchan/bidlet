@@ -26,7 +26,6 @@ class Listings(APIView):
 
     def post(self, request):
         form = SearchPropertyForm(request.POST or None)
-        print(form)
         if form.is_valid():
             andPredicates = []
             orPredicates = []
@@ -124,10 +123,8 @@ def createBid(request, propertyID=None):
             # The amount we charge for deposit will be equal to half the
             # bid price. * 100 because we need this value in cents
             # Autowin amount instead of bidPrice to protect user
-            # Stripe does not take decimals! 
+            # Stripe does not take decimals!
             value = int(autoWin * 100 / 2)
-
-            print(account_queryset.stripe_id)
 
             try:
                 # Charging the customer
@@ -138,7 +135,6 @@ def createBid(request, propertyID=None):
                 )
                 messages.success(
                     request, 'Congratulations! You have won the auction!')
-                print("success")
                 return redirect('/property/' + str(propertyID))
             except:
                 messages.error(
