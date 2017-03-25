@@ -9,6 +9,7 @@ from django.db.models import Q
 import operator
 from functools import reduce
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
 
@@ -38,6 +39,9 @@ class Listings(APIView):
     		rooms = form.cleaned_data['rooms']
     		availStart = form.cleaned_data['availStart']
     		availEnd = form.cleaned_data['availEnd']
+    		priceUnder = form.cleaned_data['priceUnder']
+    		priceOver = form.cleaned_data['priceOver']
+
     		if country:
     			predicates.append(('country__icontains', country))
     		if city:
@@ -51,7 +55,11 @@ class Listings(APIView):
     			predicates.append(('availStart__lte', availStart))
     		if availEnd:
     			predicates.append(('availEnd__gte', availEnd))
-    			
+    		if priceUnder:
+    			predicates.append(('curPrice__lte', priceUnder))
+    		if priceOver:
+    			predicates.append(('curPrice__gte', priceOver))
+
     		q_list = [Q(x) for x in predicates]
     		if q_list:
     			listings = Property.objects.filter(reduce(operator.and_, q_list))
@@ -69,6 +77,7 @@ class Listings(APIView):
 
 def createBid(request, propertyID=None):
 	# Might consider to use filter(propertyID=propertyID).first
+	context = {}
 	bid = Bidding.objects.get(propertyID=propertyID)
 	form = BidForm(request.POST or None, propID=bid.propertyID)
 	if form.is_valid():
@@ -85,10 +94,15 @@ def createBid(request, propertyID=None):
 		biddingID = bid.biddingID
 
 		bid = Bidders.objects.create(userID=userID, bidPrice=bidPrice, biddingID=biddingID)
-		Bidding.objects.filter(biddingID=biddingID).update(CurPrice=bid.bidPrice)
+		Bidding.objects.filter(biddingID=biddingID).update(curPrice=bid.bidPrice)
+		Property.objects.filter(propertyID=biddingID).update(curPrice=bid.bidPrice)
+
+		messages.success(request, 'You are now the highest bidder @ $' + str(bid.bidPrice))
 		return HttpResponseRedirect('/property/'+ str(propertyID))
 	else:
-		return render(request,'listings.html', args)
+		context['form'] = form
+		context['property'] = Property.objects.get(propertyID=propertyID)
+		return render(request,'property.html', context)
 	# Might want to use redirect() here instead
     # Pass query string with the current implementation to make sure
     # that validation error is returned. (Error if bid < currPrice + 10)
@@ -124,11 +138,12 @@ def createProperty(request):
 		rooms = form.cleaned_data['rooms']
 
 		newProp = Property.objects.create(title= title, description=description, ownerID=ownerID, address=address,
-			country=country, city=city, postalCode=postalCode, suite=suite, image=image, startPrice=startPrice, availStart=availStart, availEnd=availEnd, rooms=rooms)
+			country=country, city=city, postalCode=postalCode, suite=suite, image=image, startPrice=startPrice, curPrice=startPrice, availStart=availStart, availEnd=availEnd, rooms=rooms)
 		bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice,
-			CurPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
+			curPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
 
 		# Might want to use redirect() here instead
+		messages.success(request, 'Your new listing added!')
 		return HttpResponseRedirect('/property/'+ str(newProp.propertyID))
 
 class propertyDetails(APIView):
@@ -139,7 +154,7 @@ class propertyDetails(APIView):
         property = Property.objects.get(propertyID=id)
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
-        form = BidForm(request.POST or None, propID=id) #, bidPrice=bidding.CurPrice
+        form = BidForm(request.POST or None, propID=id)
         context = {
 			'property': property,
 			'bidding': bidding,

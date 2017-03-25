@@ -15,7 +15,7 @@ class BidForm(forms.Form):
 		bid = self.cleaned_data.get("bidPrice")
 		currentPriceQS = Bidding.objects.filter(propertyID=self.propertyID).first()
 
-		if bid < currentPriceQS.CurPrice + 10:
+		if bid < currentPriceQS.curPrice + 10:
 			raise forms.ValidationError("Bid must be greater than current bid price by at least $10.00")
 
 		return bid
@@ -41,6 +41,8 @@ class SearchPropertyForm(forms.Form):
 	country = forms.CharField(required=False)
 	city = forms.CharField(required=False)
 	rooms = forms.IntegerField(required=False)
-	availStart = forms.DateTimeField(required=False)
-	availEnd = forms.DateTimeField(required=False)
+	availStart = forms.DateTimeField(label="Move-in Date", required=False)
+	availEnd = forms.DateTimeField(label="Move-out Date", required=False)
+	priceUnder = forms.IntegerField(label="Price under", required=False)
+	priceOver = forms.IntegerField(label="Price over", required=False)
 

@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-  <title>Property</title>
-</head>
-
-<body>
+{% block content %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="message-{{message.tags}}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
   <h1>Property Details</h1>
   <h2>{{ property.title}}</h2>
   <div class="property">
     <div class="property__image">
       <img src="{{ property.image}}">
     </div>
-    <span class="property__price">${{ bidding.CurPrice|default:bidding.startPrice|floatformat:"0"}} CAD</span>
+    <span class="property__price">${{ property.curPrice|default:property.startPrice|floatformat:"0"}} CAD</span>
     {% if property.rooms %}
         <div class="property__info">{{ property.rooms}} Rooms</div>
     {% endif %}
@@ -21,21 +23,19 @@
     {% endif %}
     <div class="property__info">{{ property.city}}, {{ property.country }}</div>
     <div class="property__info">{{ property.address }}</div>
-    <h2>Bidding</h2>
-    <div class="property__info">Current price: {{ bidding.CurPrice }}</div>
+<!--     <h2>Bidding</h2>
+    <div class="property__info">Current price: {{ bidding.curPrice }}</div>
     <div class="property__info">Owner: {{ bidding.ownerID }}</div>
     <ul>
       {% for bidder in bidders %}
       <li>User({{ bidder.userID}}) bidded ${{ bidder.bidPrice }}</li>
       {% endfor %}
-    </ul>
-    <!-- 	{%block bidForm %}
-	{% endblock %} -->
+    </ul> -->
     <h2>Bid Now</h2>
     <form role="form" action="/bid/{{property.propertyID}}" method="post">
-      {% csrf_token %}
-      <label for="bidPrice">Your Bid Price: </label>
-      <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}">
+      {% csrf_token %} {{form}}
+<!--       <label for="bidPrice">Your Bid Price: </label>
+      <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}"> -->
       <button type="submit">Submit</button>
     </form>
   </div>
@@ -68,4 +68,4 @@
 }
 </style>
 
-</html>
+{% endblock %}

@@ -17,6 +17,7 @@ class PropertySerializer(serializers.ModelSerializer):
 			'suite',
 			'image',
 			'startPrice',
+			'curPrice',
 			'biddingID',
 			'availStart',
 			'availEnd',
@@ -30,7 +31,7 @@ class BiddingSerializer(serializers.ModelSerializer):
 			'biddingID',
 			'propertyID',
 			'startPrice',
-			'CurPrice',
+			'curPrice',
 			'ownerID',
 			'dateStart',
 			'dateEnd'

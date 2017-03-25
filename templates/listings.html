@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 
-{% block listings %}
+{% block content %}
   <div class="createProperty">
     <h2>Create New Property</h2>
     <form role="form" action="/createProperty/" method="post">
@@ -25,7 +25,7 @@
         <div class="property__image">
           <img src="{{ listing.image}}">
         </div>
-        <span class="property__price">${{ listing.startPrice|floatformat:"0"}} CAD</span>
+        <span class="property__price">${{ listing.curPrice|default:listing.startPrice|floatformat:"0"}} CAD</span>
         <div class="property__title">{{ listing.title}}</div>
         {% if listing.rooms %}
         <div class="property__info">{{ listing.rooms}} Rooms</div>
@@ -66,7 +66,7 @@
   .property {
     width: 300px;
     background-color: #fff;
-    margin: 0 5px;
+    margin: 10px 10px;
   }
 
   .property__info {
