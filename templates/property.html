@@ -12,7 +12,13 @@
     <div class="property__image">
       <img src="{{ property.image}}">
     </div>
-    <span class="property__price">${{ bidding.CurPrice|default:bidding.startPrice}} CAD</span>
+    <span class="property__price">${{ bidding.CurPrice|default:bidding.startPrice|floatformat:"0"}} CAD</span>
+    {% if property.rooms %}
+        <div class="property__info">{{ property.rooms}} Rooms</div>
+    {% endif %}
+    {% if property.availStart and property.availEnd %}
+        <div class="property__info">Available from {{ property.availStart|date:"M Y"}} to {{ property.availEnd|date:"M Y"}}</div>
+    {% endif %}
     <div class="property__info">{{ property.city}}, {{ property.country }}</div>
     <div class="property__info">{{ property.address }}</div>
     <h2>Bidding</h2>

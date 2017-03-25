@@ -18,6 +18,9 @@ class PropertySerializer(serializers.ModelSerializer):
 			'image',
 			'startPrice',
 			'biddingID',
+			'availStart',
+			'availEnd',
+			'rooms'
 			)
 
 class BiddingSerializer(serializers.ModelSerializer):

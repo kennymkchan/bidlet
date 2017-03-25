@@ -32,8 +32,15 @@ class CreatePropertyForm(forms.Form):
 	startPrice = forms.DecimalField(initial=600)
 	dateStart = forms.DateTimeField(initial=datetime.now())
 	dateEnd = forms.DateTimeField(initial=datetime.now())
+	availStart = forms.DateTimeField(initial=datetime.now())
+	availEnd = forms.DateTimeField(initial=datetime.now())
+	rooms = forms.IntegerField(initial=1)
 
 class SearchPropertyForm(forms.Form):
 	keyword = forms.CharField(required=False)
 	country = forms.CharField(required=False)
 	city = forms.CharField(required=False)
+	rooms = forms.IntegerField(required=False)
+	availStart = forms.DateTimeField(required=False)
+	availEnd = forms.DateTimeField(required=False)
+

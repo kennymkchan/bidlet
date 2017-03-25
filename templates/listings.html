@@ -11,7 +11,7 @@
   </div>
   <h2>Search for Listings</h2>
   <div class="query">
-    <form role="form" action="/search/" method="post">
+    <form role="form" action="/listings/" method="post">
       {% csrf_token %} {{ SearchPropertyForm }}
       <button type="submit">Submit</button>
     </form>
@@ -25,8 +25,14 @@
         <div class="property__image">
           <img src="{{ listing.image}}">
         </div>
-        <span class="property__price">${{ listing.startPrice}} CAD</span>
+        <span class="property__price">${{ listing.startPrice|floatformat:"0"}} CAD</span>
         <div class="property__title">{{ listing.title}}</div>
+        {% if listing.rooms %}
+        <div class="property__info">{{ listing.rooms}} Rooms</div>
+        {% endif %}
+        {% if listing.availStart and listing.availEnd %}
+        	<div class="property__info">Available:{{ listing.availStart|date:"M Y"}}-{{ listing.availEnd|date:"M Y"}}</div>
+        {% endif %}
         <div class="property__info">{{ listing.city}}, {{ listing.country }}</div>
         <div class="property__info">{{ listing.address }}</div>
       </div>
@@ -48,12 +54,13 @@
   .listings {
     margin: 0 auto;
     width: 1000px;
-    height: 350px;
+    height: auto;
     display: flex;
     align-items: stretch;
     align-content: flex-start;
     justify-content: flex-start;
     flex-wrap: wrap;
+    margin-bottom: 50px;
   }
 
   .property {

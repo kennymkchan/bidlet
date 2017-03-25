@@ -25,29 +25,38 @@ class Listings(APIView):
 
     def get(self, request):
         listings = Property.objects.all()
-        return Response({'listings': listings, 'CreatePropertyForm':CreatePropertyForm() , 'SearchPropertyForm': SearchPropertyForm})
-
-class searchListings(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'listings.html'
+        return Response({'listings': listings, 'CreatePropertyForm':CreatePropertyForm , 'SearchPropertyForm': SearchPropertyForm})
 
     def post(self, request):
-    	form = SearchPropertyForm(request.POST)
+    	form = SearchPropertyForm(request.POST or None)
     	print(form)
     	if form.is_valid():
     		predicates = []
     		country = form.cleaned_data['country']
     		city = form.cleaned_data['city']
     		keyword = form.cleaned_data['keyword']
+    		rooms = form.cleaned_data['rooms']
+    		availStart = form.cleaned_data['availStart']
+    		availEnd = form.cleaned_data['availEnd']
     		if country:
-    			predicates.append(('country__contains', country))
+    			predicates.append(('country__icontains', country))
     		if city:
-    			predicates.append(('city__contains', city))
+    			predicates.append(('city__icontains', city))
     		if keyword:
-    			predicates.append(('title__contains', keyword))
+    			predicates.append(('title__icontains', keyword))
     			# TO DO: SEARCH FOR DESCRIPTION USING OR
+    		if rooms:
+    			predicates.append(('rooms__exact', rooms))
+    		if availStart:
+    			predicates.append(('availStart__lte', availStart))
+    		if availEnd:
+    			predicates.append(('availEnd__gte', availEnd))
+    			
     		q_list = [Q(x) for x in predicates]
-    		listings = Property.objects.filter(reduce(operator.and_, q_list))
+    		if q_list:
+    			listings = Property.objects.filter(reduce(operator.and_, q_list))
+    		else:
+    			listings = Property.objects.all()
     		search = predicates
     	context = {
 			'listings': listings,
@@ -77,13 +86,15 @@ def createBid(request, propertyID=None):
 
 		bid = Bidders.objects.create(userID=userID, bidPrice=bidPrice, biddingID=biddingID)
 		Bidding.objects.filter(biddingID=biddingID).update(CurPrice=bid.bidPrice)
-
+		return HttpResponseRedirect('/property/'+ str(propertyID))
+	else:
+		return render(request,'listings.html', args)
 	# Might want to use redirect() here instead
     # Pass query string with the current implementation to make sure
     # that validation error is returned. (Error if bid < currPrice + 10)
 
     # Else, use `return render(request, 'template', context)`
-	return HttpResponseRedirect('/property/'+ str(propertyID))
+	
 
 def createProperty(request):
 	form = CreatePropertyForm(request.POST or None)
@@ -96,25 +107,29 @@ def createProperty(request):
 		# fail safe
 		ownerID = 1
 
-	title = form.cleaned_data['title']
-	description = form.cleaned_data['description']
-	address = form.cleaned_data['address']
-	country = form.cleaned_data['country']
-	city = form.cleaned_data['city']
-	postalCode = form.cleaned_data['postalCode']
-	suite = form.cleaned_data['suite']
-	image = form.cleaned_data['image']
-	startPrice = form.cleaned_data['startPrice']
-	dateStart = form.cleaned_data['dateStart']
-	dateEnd = form.cleaned_data['dateEnd']
+	if form.is_valid():
+		title = form.cleaned_data['title']
+		description = form.cleaned_data['description']
+		address = form.cleaned_data['address']
+		country = form.cleaned_data['country']
+		city = form.cleaned_data['city']
+		postalCode = form.cleaned_data['postalCode']
+		suite = form.cleaned_data['suite']
+		image = form.cleaned_data['image']
+		startPrice = form.cleaned_data['startPrice']
+		dateStart = form.cleaned_data['dateStart']
+		dateEnd = form.cleaned_data['dateEnd']
+		availStart = form.cleaned_data['availStart']
+		availEnd = form.cleaned_data['availEnd']
+		rooms = form.cleaned_data['rooms']
 
-	newProp = Property.objects.create(title= title, description=description, ownerID=ownerID, address=address,
-		country=country, city=city, postalCode=postalCode, suite=suite, image=image, startPrice=startPrice)
-	bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice,
-		CurPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
+		newProp = Property.objects.create(title= title, description=description, ownerID=ownerID, address=address,
+			country=country, city=city, postalCode=postalCode, suite=suite, image=image, startPrice=startPrice, availStart=availStart, availEnd=availEnd, rooms=rooms)
+		bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice,
+			CurPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
 
-	# Might want to use redirect() here instead
-	return HttpResponseRedirect('/property/'+ str(newProp.propertyID))
+		# Might want to use redirect() here instead
+		return HttpResponseRedirect('/property/'+ str(newProp.propertyID))
 
 class propertyDetails(APIView):
     renderer_classes = [TemplateHTMLRenderer]

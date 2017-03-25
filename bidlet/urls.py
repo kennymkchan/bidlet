@@ -15,8 +15,7 @@ from api.views import (
     createBid,
     createProperty,
     propertyDetails,
-    Listings,
-    searchListings,
+    Listings
     )
 
 urlpatterns = [
@@ -24,7 +23,6 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='index.html')),
 
     # Property Management
-	url(r'^search/', searchListings.as_view(), name='search-listings'),
 	url(r'^listings/', Listings.as_view(), name='listings'),
 	url(r'^property/(?P<id>\d{1,})/$', propertyDetails.as_view(), name='property'),
 	url(r'^createProperty/', createProperty, name='create-property'),
