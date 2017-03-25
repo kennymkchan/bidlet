@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+{% endblock %}
+
+
+{% block content %}
+  <h2>Welcome to payments!</h2>
+
+  <h3>Here, you can find the ability to edit your payment methods</h3>
+
+  <a href="/user/edit">Edit Profile</a>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="message-{{message.tags}}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ paymentForm.as_p }}
+    <button type="submit" value="{{title}}">Save</button>
+    <a href="/home"><button type="button" value="{{title}}">Return to Profile</button></a>
+  </form>
+
+
+{% endblock %}

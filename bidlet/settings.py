@@ -129,10 +129,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-# strip = sk_test_G5cg5ZCor1a4HOdWqPb57YxV
+STRIPE_KEY = "sk_test_G5cg5ZCor1a4HOdWqPb57YxV"
 # Successful card: 4242424242424242
 # Not successful card: 4000000000000077
-# PUblishable key: pk_test_B2Q087W7admtUPhm8hg2NyDO
+PUBLISHER_KEY = "pk_test_B2Q087W7admtUPhm8hg2NyDO"
 
 
 # Static files (CSS, JavaScript, Images)
