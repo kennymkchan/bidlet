@@ -4,8 +4,9 @@
 }
 
 .nav-items {
-  width: 400px;
+  max-width: 400px;
   display: inline-block;
+  margin-right: 20px;
   float: right;
 }
 

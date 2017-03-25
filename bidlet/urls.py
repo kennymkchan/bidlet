@@ -9,6 +9,7 @@ from users.views import (
     registration_view,
     home_view,
     profile_edit_view,
+    payments_view,
     )
 
 from api.views import (
@@ -35,5 +36,6 @@ urlpatterns = [
     url(r'^logout/', logout_view, name="logout"),
     url(r'^register/', registration_view, name="register"),
     url(r'^home/', home_view, name="home"),
-    url(r'^user/edit', profile_edit_view, name="edit_profile"),
+    url(r'^user/edit', profile_edit_view, name="edit-profile"),
+    url(r'^user/payments', payments_view, name="payment-methods"),
 ]

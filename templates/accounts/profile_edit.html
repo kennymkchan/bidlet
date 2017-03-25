@@ -9,6 +9,8 @@
 
   <h3>Here, you can find the ability to edit your own account information</h3>
 
+  <a href="/user/payments">Payment Methods</a>
+
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ accountEditForm.as_p }}

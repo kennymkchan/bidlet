@@ -9,7 +9,10 @@ from datetime import date
 from django import forms
 from .models import Account
 
+from django.conf import settings
 import stripe
+
+stripe_key = settings.STRIPE_KEY
 
 User = get_user_model()
 
@@ -145,10 +148,9 @@ class AccountEditForm(forms.ModelForm):
                 raise forms.ValidationError("You must be older than 16 to use this site")
         return birthday
 
-class PaymentForm(forms.ModelForm):
+class PaymentForm(forms.Form):
 
-    class Meta:
-        model = Account
-        fields = [
-            'stripe_id',
-        ]
+	number = forms.CharField(required=True)
+	exp_month = forms.ChoiceField(required=True, choices=[(x, x) for x in range(1, 13)])
+	exp_year = forms.ChoiceField(required=True, choices=[(x, x) for x in range(date.today().year, date.today().year + 15)])
+	cv = forms.IntegerField(required = True, label = "CV Number", max_value = 9999, widget = forms.TextInput(attrs={'size': '4'}))
