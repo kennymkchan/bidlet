@@ -15,6 +15,11 @@
       <img src="{{ property.image}}">
     </div>
     <span class="property__price">${{ property.curPrice|default:property.startPrice|floatformat:"0"}} CAD</span>
+    {% if property.autoWinPrice%}
+      <br>
+      <span class="property__price">Auto Win: ${{ property.autoWinPrice|default:property.startPrice|floatformat:"0"}} CAD</span>
+      <br>
+    {% endif %}
     {% if property.rooms %}
         <div class="property__info">{{ property.rooms}} Rooms</div>
     {% endif %}
@@ -31,6 +36,8 @@
           No Credit Card Attached. Please update payments method
           <a href="/user/payments">here</a>
         </span>
+      {% elif user.id == property.ownerID %}
+        <p class="user--is-owner">You cannot bid on your own property</p>
       {% elif user.id == currentUser.userID %}
         <p class="user--current-bid">You are currently the top bid!</p>
       {% else %}

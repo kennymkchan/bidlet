@@ -12,6 +12,7 @@ class Property(models.Model):
 	suite = models.IntegerField(blank=True, null=True)
 	image = models.CharField(max_length=200)
 	startPrice = models.DecimalField(max_digits=8, decimal_places=2)
+	autoWinPrice = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
 	curPrice = models.DecimalField(max_digits=8, decimal_places=2,blank=True, null=True)
 	biddingID = models.IntegerField(blank=True, null=True)
 	availStart = models.DateTimeField(blank=True, null=True)

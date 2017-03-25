@@ -30,6 +30,7 @@ class CreatePropertyForm(forms.Form):
 	suite = forms.IntegerField(initial=400)
 	image = forms.CharField(initial="http://www.hawkswap.com/wp-content/uploads/2012/08/438421.jpg")
 	startPrice = forms.DecimalField(initial=600)
+	autoWinPrice = forms.DecimalField(initial=800, required=False)
 	dateStart = forms.DateTimeField(initial=datetime.now())
 	dateEnd = forms.DateTimeField(initial=datetime.now()+timedelta(days=10))
 	availStart = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=4))
@@ -45,4 +46,3 @@ class SearchPropertyForm(forms.Form):
 	availEnd = forms.DateTimeField(label="Move-out Date", required=False)
 	priceUnder = forms.IntegerField(label="Price under", required=False)
 	priceOver = forms.IntegerField(label="Price over", required=False)
-
