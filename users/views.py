@@ -4,11 +4,19 @@ from django.contrib.auth import (
     login,
     logout,
 )
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import (AccountLoginForm, AccountRegistrationForm, UserRegistrationForm, AccountEditForm)
+from .forms import (
+    AccountLoginForm,
+    AccountRegistrationForm,
+    UserRegistrationForm,
+    AccountEditForm,
+    PaymentForm
+)
 from users.models import Account
+from django.conf import settings
+import stripe
 
 @login_required(login_url="/login/")
 def home_view(request):
@@ -47,6 +55,62 @@ def profile_edit_view(request):
         "account": account_queryset,
     }
     return render(request, 'accounts/profile_edit.html', context)
+
+@login_required(login_url="/login/")
+def payments_view(request):
+    user = request.user
+
+    account_queryset = Account.objects.get(user_id=user.id)
+
+    # Might want to try to add an instance to this, so previous cc info shows
+    # Need to store partially hidden cc info
+    paymentForm = PaymentForm(request.POST or None)
+
+    if paymentForm.is_valid():
+
+        card_number = paymentForm.cleaned_data.get("number")
+        card_cv = paymentForm.cleaned_data.get("cv")
+        card_exp_month = paymentForm.cleaned_data.get("exp_month")
+        card_exp_year = paymentForm.cleaned_data.get("exp_year")
+
+        stripe.api_key = settings.STRIPE_KEY
+
+        # Checks if the token is valid
+        try:
+            token = stripe.Token.create(
+                card={
+                    "number": card_number,
+                    "exp_month": card_exp_month,
+                    "exp_year": card_exp_year,
+                    "cvc": card_cv,
+                },
+            )
+
+        # If the token is not valid, return an error to the page
+        except:
+            messages.error(request, 'Credit card information is invalid!')
+            print("Heheh")
+            return redirect('/user/payments')
+
+        # Create a customer on stripe
+        stripe_customer = stripe.Customer.create(
+            card = token,
+            description = user
+        )
+
+        # Update account with the right stripe id
+        Account.objects.select_for_update().filter(user_id=user.id).update(stripe_id=stripe_customer.id)
+
+        messages.success(request, 'Credit card information has been added!')
+        return redirect('/user/payments')
+
+    context = {
+        "paymentForm": paymentForm,
+        "title": "payment_method",
+        "account": account_queryset,
+    }
+
+    return render(request, 'accounts/payments.html', context)
 
 def login_view(request):
     # get next page for login required
