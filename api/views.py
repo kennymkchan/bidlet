@@ -4,19 +4,16 @@ from django.views.generic import TemplateView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.views import APIView
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.db.models import Q
 import operator
 from functools import reduce
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib import messages
 
 from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
 
 from .models import Property, Bidding, Bidders
 from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
-
-from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
 
@@ -32,7 +29,8 @@ class Listings(APIView):
     	form = SearchPropertyForm(request.POST or None)
     	print(form)
     	if form.is_valid():
-    		predicates = []
+    		andPredicates = []
+    		orPredicates = []
     		country = form.cleaned_data['country']
     		city = form.cleaned_data['city']
     		keyword = form.cleaned_data['keyword']
@@ -43,29 +41,39 @@ class Listings(APIView):
     		priceOver = form.cleaned_data['priceOver']
 
     		if country:
-    			predicates.append(('country__icontains', country))
+    			andPredicates.append(('country__icontains', country))
     		if city:
-    			predicates.append(('city__icontains', city))
+    			andPredicates.append(('city__icontains', city))
     		if keyword:
-    			predicates.append(('title__icontains', keyword))
-    			# TO DO: SEARCH FOR DESCRIPTION USING OR
+    			orPredicates.append(('title__icontains', keyword))
+    			orPredicates.append(('description__icontains', keyword))
     		if rooms:
-    			predicates.append(('rooms__exact', rooms))
+    			andPredicates.append(('rooms__exact', rooms))
     		if availStart:
-    			predicates.append(('availStart__lte', availStart))
+    			andPredicates.append(('availStart__lte', availStart))
     		if availEnd:
-    			predicates.append(('availEnd__gte', availEnd))
+    			andPredicates.append(('availEnd__gte', availEnd))
     		if priceUnder:
-    			predicates.append(('curPrice__lte', priceUnder))
+    			andPredicates.append(('curPrice__lte', priceUnder))
     		if priceOver:
-    			predicates.append(('curPrice__gte', priceOver))
+    			andPredicates.append(('curPrice__gte', priceOver))
 
-    		q_list = [Q(x) for x in predicates]
-    		if q_list:
-    			listings = Property.objects.filter(reduce(operator.and_, q_list))
-    		else:
+    		andQuery = [Q(x) for x in andPredicates]
+    		orQuery = [Q(x) for x in orPredicates]
+
+    		if not andQuery and not orQuery:
     			listings = Property.objects.all()
-    		search = predicates
+    		else:
+	    		if andQuery:
+	    			and_listings = Property.objects.filter(reduce(operator.and_, andQuery))
+	    			listings = and_listings
+	    		if orQuery:
+	    			or_listings = Property.objects.filter(reduce(operator.or_, orQuery))
+	    			listings = or_listings
+	    		if andQuery and orQuery and and_listings and or_listings:
+	    			listings = and_listings & or_listings
+    		search = { "AND": andPredicates, "OR": orPredicates}
+
     	context = {
 			'listings': listings,
 			'CreatePropertyForm':CreatePropertyForm,
@@ -76,7 +84,6 @@ class Listings(APIView):
     	return Response(context)
 
 def createBid(request, propertyID=None):
-	# Might consider to use filter(propertyID=propertyID).first
 	context = {}
 	bid = Bidding.objects.get(propertyID=propertyID)
 	form = BidForm(request.POST or None, propID=bid.propertyID)
@@ -91,6 +98,14 @@ def createBid(request, propertyID=None):
 		else:
 			userID = 1
 
+		# Allow for Now
+		# TODO: DO NOT LET OWNER BID ON THEIR OWN PROPERTY
+		# prop = Property.objects.get(propertyID=propertyID)
+		# if userID == prop.ownerID:
+		# 	messages.error(request, 'You cannot bid on your own property')
+		# 	return HttpResponseRedirect('/property/'+ str(propertyID))		
+
+
 		biddingID = bid.biddingID
 
 		bid = Bidders.objects.create(userID=userID, bidPrice=bidPrice, biddingID=biddingID)
@@ -103,12 +118,6 @@ def createBid(request, propertyID=None):
 		context['form'] = form
 		context['property'] = Property.objects.get(propertyID=propertyID)
 		return render(request,'property.html', context)
-	# Might want to use redirect() here instead
-    # Pass query string with the current implementation to make sure
-    # that validation error is returned. (Error if bid < currPrice + 10)
-
-    # Else, use `return render(request, 'template', context)`
-	
 
 def createProperty(request):
 	form = CreatePropertyForm(request.POST or None)

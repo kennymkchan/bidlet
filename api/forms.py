@@ -1,5 +1,5 @@
 from django import forms
-from datetime import *
+from datetime import datetime, timedelta
 from .models import Bidding
 
 class BidForm(forms.Form):
@@ -31,9 +31,9 @@ class CreatePropertyForm(forms.Form):
 	image = forms.CharField(initial="http://www.hawkswap.com/wp-content/uploads/2012/08/438421.jpg")
 	startPrice = forms.DecimalField(initial=600)
 	dateStart = forms.DateTimeField(initial=datetime.now())
-	dateEnd = forms.DateTimeField(initial=datetime.now())
-	availStart = forms.DateTimeField(initial=datetime.now())
-	availEnd = forms.DateTimeField(initial=datetime.now())
+	dateEnd = forms.DateTimeField(initial=datetime.now()+timedelta(days=10))
+	availStart = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=4))
+	availEnd = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=20))
 	rooms = forms.IntegerField(initial=1)
 
 class SearchPropertyForm(forms.Form):
