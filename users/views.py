@@ -89,7 +89,6 @@ def payments_view(request):
         # If the token is not valid, return an error to the page
         except:
             messages.error(request, 'Credit card information is invalid!')
-            print("Heheh")
             return redirect('/user/payments')
 
         # Create a customer on stripe
