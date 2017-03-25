@@ -11,7 +11,7 @@ class BidForm(forms.Form):
 		self.propertyID = kwargs.pop("propID")
 		super(BidForm, self).__init__(*args, **kwargs)
 
-	def clean_bidPrice(self, **kwargs):
+	def clean_bidPrice(self):
 		bid = self.cleaned_data.get("bidPrice")
 		currentPriceQS = Bidding.objects.filter(propertyID=self.propertyID).first()
 
@@ -36,6 +36,14 @@ class CreatePropertyForm(forms.Form):
 	availStart = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=4))
 	availEnd = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=20))
 	rooms = forms.IntegerField(initial=1)
+
+	# def clean_autoWinPrice(self):
+	# 	winPrice = self.cleaned_data.get("autoWinPrice")
+	# 	startPrice = self.cleaned_data.get("startPrice")
+	#
+	# 	if startPrice > winPrice:
+	# 		raise forms.ValidationError("Autowin price must be greater than initial start price")
+	# 	return winPrice
 
 class SearchPropertyForm(forms.Form):
 	keyword = forms.CharField(required=False)
