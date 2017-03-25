@@ -1,23 +1,15 @@
-from rest_framework import generics
+import operator
+
 from rest_framework.response import Response
-from django.views.generic import TemplateView
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.db.models import Q
-import operator
 from functools import reduce
 from django.shortcuts import render, redirect
-
 from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
-
 from .models import Property, Bidding, Bidders
 from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
-
-from django.shortcuts import render
-
-from django.contrib.auth.decorators import login_required
 
 class Listings(APIView):
     renderer_classes = [TemplateHTMLRenderer]

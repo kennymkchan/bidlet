@@ -9,11 +9,6 @@ from datetime import date
 from django import forms
 from .models import Account
 
-from django.conf import settings
-import stripe
-
-stripe_key = settings.STRIPE_KEY
-
 User = get_user_model()
 
 class AccountLoginForm(forms.Form):
