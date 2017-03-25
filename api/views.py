@@ -113,37 +113,14 @@ def createBid(request, propertyID=None):
         Property.objects.filter(propertyID=biddingID).update(
             curPrice=bid.bidPrice)
 
-    if autoWin is not None:
-        # If user wishes to auto win the property
-        if bidPrice >= autoWin:
+        if autoWin is not None:
+            # If user wishes to auto win the property
+            if bidPrice >= autoWin:
+                return chargeCustomer(request, user.id, autoWin, propertyID)
 
-            account_queryset = Account.objects.get(user_id=user.id)
-            stripe.api_key = settings.STRIPE_KEY
-
-            # The amount we charge for deposit will be equal to half the
-            # bid price. * 100 because we need this value in cents
-            # Autowin amount instead of bidPrice to protect user
-            # Stripe does not take decimals!
-            value = int(autoWin * 100 / 2)
-
-            try:
-                # Charging the customer
-                stripe.Charge.create(
-                    amount=value,
-                    currency="cad",
-                    customer=account_queryset.stripe_id,
-                )
-                messages.success(
-                    request, 'Congratulations! You have won the auction!')
-                return redirect('/property/' + str(propertyID))
-            except:
-                messages.error(
-                    request, "Something went wrong, unable to charge credit card")
-                return redirect('/property/' + str(propertyID))
-
-            messages.success(
-                request, 'You are now the highest bidder @ $' + str(bid.bidPrice))
-            return HttpResponseRedirect('/property/' + str(propertyID))
+        messages.success(
+            request, 'You are now the highest bidder @ $' + str(bid.bidPrice))
+        return HttpResponseRedirect('/property/' + str(propertyID))
     else:
         context['form'] = form
         context['property'] = Property.objects.get(propertyID=propertyID)
@@ -218,3 +195,29 @@ class propertyDetails(APIView):
             'account': account
         }
         return Response(context)
+
+
+def chargeCustomer(request, userID, autoWin, propertyID):
+    account_queryset = Account.objects.get(user_id=userID)
+    stripe.api_key = settings.STRIPE_KEY
+
+    # The amount we charge for deposit will be equal to half the
+    # bid price. * 100 because we need this value in cents
+    # Autowin amount instead of bidPrice to protect user
+    # Stripe does not take decimals!
+    value = int(autoWin * 100 / 2)
+
+    try:
+        # Charging the customer
+        stripe.Charge.create(
+            amount=value,
+            currency="cad",
+            customer=account_queryset.stripe_id,
+        )
+        messages.success(
+            request, 'Congratulations! You have won the auction!')
+        return redirect('/property/' + str(propertyID))
+    except:
+        messages.error(
+            request, "Something went wrong, unable to charge credit card")
+        return redirect('/property/' + str(propertyID))
