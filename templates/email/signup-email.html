@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bidlet - One Site, One Home</title>
+    <style>
+      html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0;
+      }
+      .container {
+        width: 100%;
+        background: #111111;
+        text-align: left;
+      }
+      .opening-text {
+      display:none;
+      font-size:1px;
+      line-height:1px;
+      max-height:0px;
+      max-width:0px;
+      opacity:0;
+      overflow:hidden;
+      }
+      .button:link,
+      .button:visited,
+      .button:hover,
+      .button:focus,
+      .button:active{
+      text-decoration: none;
+      }
+      .button,
+      button {
+      color: #fff;
+      display: inline-block;
+      text-decoration: none;
+      cursor: pointer;
+      min-width: 90px;
+      text-align: center;
+      background-color: #6aa74c;
+      padding: 10px 30px;
+      border-radius: 5px;
+      margin: 10px;
+      }
+      .button-container {
+      margin: 0 auto;
+      }
+      .content-container {
+      padding: 35px;
+      font-family: sans-serif;
+      font-size: 15px;
+      line-height: 20px;
+      color: #000;
+      }
+      .contact-container {
+      padding: 40px 10px;
+      width: 100%;
+      font-size: 12px;
+      font-family: sans-serif;
+      line-height:18px;
+      text-align: center;
+      color: #888888;
+      }
+      .hero-image {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      background: #dddddd;
+      font-family: sans-serif;
+      font-size: 15px;
+      line-height: 20px;
+      color: #555555;
+      }
+      .white-bg {
+      background-color: white;
+      }
+      .email-container {
+      max-width: 600px;
+      margin: auto;
+      }
+      .view-web {
+        color:#fff;
+        text-decoration:underline;
+      }
+    </style>
+  </head>
+  <body>
+    <center class="container">
+      <div class="opening-text">
+        <p>Greetings {{first_name}}! Thanks for signing up</p>
+      </div>
+      <div class="email-container">
+        <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+          <tr>
+            <td class="white-bg">
+              <img class="hero-image" src="https://d2lm6fxwu08ot6.cloudfront.net/img-thumbs/960w/CN7PZ9F1M6.jpg" width="600" alt="Street lights on a beautiful sky">
+            </td>
+          </tr>
+          <tr>
+            <td class="white-bg">
+              <table aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td class="content-container">
+                    <h1>Greetings from Bidlet!</h1>
+                    <br>
+                    <p>
+                      {{first_name}}! Welcome to the family! With our platform, you are gaurenteed to find a place to stay!
+                      If you need any help with getting to know our platform, please do not hesitate to contact us. We are here
+                      24/7 to make sure you find your dream place!
+                    </p>
+                    <br>
+                    <table class="button-container">
+                      <tr>
+                        <td>
+                          <a href="http://localhost:8000" class="button">
+                          Explore Now
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" style="max-width: 680px;">
+          <tr>
+            <td class="contact-container">
+              <a href="http://localhost:8000" class="view-web">View on Web</a>
+              <br><br>
+              <span>Bidlet</span>
+              <br>
+              <span>(416) 816-3303</span>
+              <br><br>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </center>
+  </body>
+</html>

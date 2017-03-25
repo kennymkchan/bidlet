@@ -23,21 +23,36 @@
     {% endif %}
     <div class="property__info">{{ property.city}}, {{ property.country }}</div>
     <div class="property__info">{{ property.address }}</div>
-<!--     <h2>Bidding</h2>
-    <div class="property__info">Current price: {{ bidding.curPrice }}</div>
-    <div class="property__info">Owner: {{ bidding.ownerID }}</div>
-    <ul>
-      {% for bidder in bidders %}
-      <li>User({{ bidder.userID}}) bidded ${{ bidder.bidPrice }}</li>
-      {% endfor %}
-    </ul> -->
+
     <h2>Bid Now</h2>
-    <form role="form" action="/bid/{{property.propertyID}}" method="post">
-      {% csrf_token %} {{form}}
-<!--       <label for="bidPrice">Your Bid Price: </label>
-      <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}"> -->
-      <button type="submit">Submit</button>
-    </form>
+    {% if user.is_authenticated %}
+      {% if account == None %}
+        <span>
+          No Credit Card Attached. Please update payments method
+          <a href="/user/payments">here</a>
+        </span>
+      {% elif user.id == currentUser.userID %}
+        <p class="user--current-bid">You are currently the top bid!</p>
+      {% else %}
+        <form role="form" action="/bid/{{property.propertyID}}" method="post">
+          {% csrf_token %}
+          <label for="bidPrice">Your Bid Price:</label>
+          <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}">
+          <button type="submit">Submit</button>
+        </form>
+      {% endif %}
+    {% endif %}
+    {% if user.is_anonymous %}
+      <div class="bid-unavailable">
+        <span> Please
+        <a href="/login/?next=/property/{{property.propertyID}}">Login</a>
+        or
+        <a href="/register/?next=/property/{{property.propertyID}}">Register</a>
+        to continue
+        </span>
+      </div>
+    {% endif %}
+
   </div>
 </body>
 <style type="text/css">

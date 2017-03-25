@@ -13,6 +13,7 @@ from django.contrib import messages
 from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
 
 from .models import Property, Bidding, Bidders
+from users.models import Account
 from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
 
 from django.contrib.auth.decorators import login_required
@@ -151,7 +152,6 @@ def createProperty(request):
 		bidding = Bidding.objects.create(biddingID=newProp.propertyID, propertyID=newProp.propertyID, startPrice=newProp.startPrice,
 			curPrice=newProp.startPrice, ownerID=newProp.ownerID, dateStart=dateStart, dateEnd=dateEnd)
 
-		# Might want to use redirect() here instead
 		messages.success(request, 'Your new listing added!')
 		return HttpResponseRedirect('/property/'+ str(newProp.propertyID))
 
@@ -163,11 +163,18 @@ class propertyDetails(APIView):
         property = Property.objects.get(propertyID=id)
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
-        form = BidForm(request.POST or None, propID=id)
+        form = BidForm(request.POST or None, propID=id) #, bidPrice=bidding.CurPrice
+        currentUser = bidders.last()
+        if request.user.is_authenticated():
+            account = Account.objects.get(user_id=request.user.id).stripe_id
+        else:
+            account = None
         context = {
-			'property': property,
-			'bidding': bidding,
-			'bidders': bidders,
-			'form': form
-		}
+            'property': property,
+            'bidding': bidding,
+            'bidders': bidders,
+            'form': form,
+            'currentUser': currentUser,
+            'account': account
+        }
         return Response(context)
