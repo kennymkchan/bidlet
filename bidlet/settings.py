@@ -134,6 +134,15 @@ STRIPE_KEY = "sk_test_G5cg5ZCor1a4HOdWqPb57YxV"
 # Not successful card: 4000000000000077
 PUBLISHER_KEY = "pk_test_B2Q087W7admtUPhm8hg2NyDO"
 
+EMAIL_HOST = 'smtp.gmail.com'
+
+## TODO: Enter email here
+EMAIL_HOST_USER = 'getbidlet@gmail.com'
+
+## TODO: Make sure to add password
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/

@@ -5,6 +5,8 @@ from django.contrib.auth import (
     logout,
 )
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import (
@@ -157,12 +159,19 @@ def registration_view(request):
 
         username = userRegisterForm.cleaned_data.get("username")
         password = userRegisterForm.cleaned_data.get("password")
+        email = userRegisterForm.cleaned_data.get("email")
+        first_name = userRegisterForm.cleaned_data.get("first_name")
         user.set_password(password)
         user.save()
         newUser = authenticate(username=username, password=password) # auth user
         account.user_id = newUser.id
         account.save()
         login(request, newUser)
+
+        try:
+            sendMail(email, first_name)
+        except:
+            print("Email send failed - Connection Error")
 
         # Check if they are trying to access a page that requires login, else,
         # just redirect them to home
@@ -178,6 +187,27 @@ def registration_view(request):
     }
 
     return render(request, 'accounts/register.html', context)
+
+def sendMail(email, first):
+
+    fields = {
+        'email': email,
+        'first_name': first
+    }
+
+    message_plain = render_to_string('email/signup-email.txt', fields)
+    message_html = render_to_string('email/signup-email.html', fields)
+    subject_title = "Bidlet - One step closer to a new home"
+
+    send_mail(
+        subject_title,
+        message_plain,
+        settings.EMAIL_HOST_USER,
+        # replce with email from params
+        ['kennykitchan@gmail.com'],
+        # Allows us to send HTML template emails
+        html_message=message_html,
+    )
 
 def logout_view(request):
     logout(request)
