@@ -76,24 +76,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
     },
-    # # Add production enviroment here
-    # 'staging': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': '####',
-    #     'USER': '####', # will need to change
-    #     'PASSWORD': '####', # probably want to keep the password file in a separate document
-    #     'HOST': '####',
-    #     'PORT': '####',
-    # },
-    # # Add production enviroment here
-    # 'production': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': '####',
-    #     'USER': '####',
-    #     'PASSWORD': '####', # probably want to keep the password file in a separate document
-    #     'HOST': '####',
-    #     'PORT': '####',
-    # }
 }
 
 

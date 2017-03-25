@@ -125,10 +125,13 @@ class propertyDetails(APIView):
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
         form = BidForm(request.POST or None, propID=id) #, bidPrice=bidding.CurPrice
+        # The most current bid's userID
+        currentUser = bidders.reverse()[0].userID
         context = {
 			'property': property,
 			'bidding': bidding,
 			'bidders': bidders,
-			'form': form
+			'form': form,
+            'currentUser': currentUser,
 		}
         return Response(context)
