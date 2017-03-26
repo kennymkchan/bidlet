@@ -39,23 +39,13 @@ def home_view(request):
     # Query a set of properties that the user is watching
     # DO NOT exclude the inactive ones, because they provide useful information as well
     property_queryset = Property.objects.filter(propertyID__in=user_properties)
-    for prop in property_queryset:
-        print(prop.curPrice)
-
-    # 1) Search bidders for userID
-    # 2) from bidders, get the biddingID
-    # 3) from biddingID as the propertyID, get the property
-    # 4) From property, determine if user is first. If they are, add to one section
-    # -> If inactive + first, they won.
-    # -> if inactive + !first, they lost. (auction over?) ## Might not even need this
-    # -> if active, one section
-
-
+    # Might want to do a exlude(status="inactive" and user.id !== self.userID)
 
     # accounts hold most of the properties
     account_queryset = Account.objects.get(user_id = user.id)
     context = {
         "account": account_queryset,
+        "properties": property_queryset,
     }
 
     return render(request, 'accounts/home.html', context)
