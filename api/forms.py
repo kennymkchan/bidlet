@@ -17,7 +17,6 @@ class BidForm(forms.Form):
 
 		if bid < currentPriceQS.curPrice + 10:
 			raise forms.ValidationError("Bid must be greater than current bid price by at least $10.00")
-
 		return bid
 
 class CreatePropertyForm(forms.Form):
@@ -36,14 +35,6 @@ class CreatePropertyForm(forms.Form):
 	availStart = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=4))
 	availEnd = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=20))
 	rooms = forms.IntegerField(initial=1)
-
-	# def clean_autoWinPrice(self):
-	# 	winPrice = self.cleaned_data.get("autoWinPrice")
-	# 	startPrice = self.cleaned_data.get("startPrice")
-	#
-	# 	if startPrice > winPrice:
-	# 		raise forms.ValidationError("Autowin price must be greater than initial start price")
-	# 	return winPrice
 
 class SearchPropertyForm(forms.Form):
 	keyword = forms.CharField(required=False)
