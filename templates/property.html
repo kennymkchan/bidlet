@@ -32,7 +32,12 @@
     <h2>Bid Now</h2>
     <p><b>Bidding ends on:</b> {{bidding.dateEnd|date:"d M Y"}} @ {{ bidding.dateEnd|time:"h:i A" }}</p>
     {% if user.is_authenticated %}
-      {% if account == None %}
+      {% if property.status and property.status == "inactive" %}
+        <span class="bid--property-inactive">
+          Auction is over. Check out other listings
+          <a href="/listings">here</a>
+        </span>
+      {% elif payment == None %}
         <span>
           No Credit Card Attached. Please update payments method
           <a href="/user/payments">here</a>

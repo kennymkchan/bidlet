@@ -18,6 +18,7 @@ class Property(models.Model):
 	availStart = models.DateTimeField(blank=True, null=True)
 	availEnd = models.DateTimeField(blank=True, null=True)
 	rooms = models.IntegerField(blank=True, null=True)
+	status = models.CharField(max_length=20, blank=True, null=True)
 
 class Bidding(models.Model):
 	biddingID = models.AutoField(primary_key=True)

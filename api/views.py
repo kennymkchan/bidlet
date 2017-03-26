@@ -21,8 +21,13 @@ class Listings(APIView):
     template_name = 'listings.html'
 
     def get(self, request):
-        listings = Property.objects.all()
-        return Response({'listings': listings, 'CreatePropertyForm': CreatePropertyForm, 'SearchPropertyForm': SearchPropertyForm})
+        listings = Property.objects.all().exclude(status="inactive")
+        context = {
+            'listings': listings,
+            'CreatePropertyForm': CreatePropertyForm,
+            'SearchPropertyForm': SearchPropertyForm
+        }
+        return Response(context)
 
     def post(self, request):
         form = SearchPropertyForm(request.POST or None)
@@ -60,15 +65,15 @@ class Listings(APIView):
             orQuery = [Q(x) for x in orPredicates]
 
             if not andQuery and not orQuery:
-                listings = Property.objects.all()
+                listings = Property.objects.all().exclude(status="inactive")
             else:
                 if andQuery:
                     and_listings = Property.objects.filter(
-                        reduce(operator.and_, andQuery))
+                        reduce(operator.and_, andQuery)).exclude(status="inactive")
                     listings = and_listings
                 if orQuery:
                     or_listings = Property.objects.filter(
-                        reduce(operator.or_, orQuery))
+                        reduce(operator.or_, orQuery)).exclude(status="inactive")
                     listings = or_listings
                 if andQuery and orQuery and and_listings and or_listings:
                     listings = and_listings & or_listings
@@ -159,7 +164,7 @@ def createProperty(request):
                                           postalCode=postalCode, suite=suite, image=image,
                                           startPrice=startPrice, autoWinPrice=autoWinPrice,
                                           curPrice=startPrice, availStart=availStart, availEnd=availEnd,
-                                          rooms=rooms)
+                                          rooms=rooms, status="active")
 
         bidding = Bidding.objects.create(biddingID=newProp.propertyID,
                                          propertyID=newProp.propertyID, startPrice=newProp.startPrice,
@@ -191,7 +196,7 @@ class propertyDetails(APIView):
             'bidders': bidders,
             'form': form,
             'currentUser': currentUser,
-            'account': account
+            'payment': account
         }
         return Response(context)
 
@@ -215,6 +220,8 @@ def chargeCustomer(request, userID, autoWin, propertyID):
         )
         messages.success(
             request, 'Congratulations! You have won the auction!')
+        Property.objects.filter(propertyID=propertyID).update(
+            status="inactive")
         return redirect('/property/' + str(propertyID))
     except:
         messages.error(
