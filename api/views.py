@@ -108,7 +108,8 @@ def createBid(request, propertyID=None):
         sublet = Property.objects.get(propertyID=biddingID)
 
         # Make sure that the bid is still placeable, and auction has not ended
-        # Accounts for the edge case the user has the page open but auction ends
+        # Accounts for the edge case the user has the page open but auction
+        # ends
         try:
             if datetime.now(timezone.utc) > bid.dateEnd:
                 messages.error(
