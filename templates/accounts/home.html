@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block styles %}
+  <link rel="stylesheet" type="text/css" href="/static/account/home.css" />
 {% endblock %}
 
 {% block content %}
@@ -10,10 +11,53 @@
 
   <p>Hello {{ user.first_name}}! </p>
 
+  <h2><b>Finished Auctions - Owned Properties</b></h2>
+  <div class="sublets">
+    {% for sublet in properties %}
+      {% if user.id == sublet.tenantID %}
+        <a href="/property/{{ sublet.propertyID }}/">
+          <div class="sublet__item">
+            <div class="sublet__image">
+              <img src="{{ sublet.image}}">
+            </div>
+            <span class="sublet__price">${{ sublet.curPrice|default:sublet.startPrice|floatformat:"0"}} CAD</span>
+            <div class="sublet__title">{{ sublet.title}}</div>
+            {% if sublet.rooms %}
+              <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
+            {% endif %}
+            <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
+            <div class="sublet__info">{{ sublet.address }}</div>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <h2><b>Watch List - Currently active</b></h2>
+  <div class="sublets">
+    {% for sublet in properties %}
+      {% if sublet.status == 'active' or sublet.status == None %}
+        <a href="/property/{{ sublet.propertyID }}/">
+          <div class="sublet__item">
+            <div class="sublet__image">
+              <img src="{{ sublet.image}}">
+            </div>
+            <span class="sublet__price">${{ sublet.curPrice|default:sublet.startPrice|floatformat:"0"}} CAD</span>
+            <div class="sublet__title">{{ sublet.title}}</div>
+            {% if sublet.rooms %}
+              <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
+            {% endif %}
+            <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
+            <div class="sublet__info">{{ sublet.address }}</div>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
   <a href="/user/edit" class="button button--edit-profile">
     Edit profile
   </a>
-
   <a href="/logout" class="button button--logout">
     Logout
   </a>
