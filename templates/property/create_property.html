@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="/static/property/listing.css" />
+{% endblock %}
+
+{% block content %}
+
+<div class="createProperty">
+  <h2>Create New Property</h2>
+  <form role="form" action="/property/create/" method="post">
+    {% csrf_token %} {{ CreatePropertyForm }}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}
