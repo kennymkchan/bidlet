@@ -16,6 +16,7 @@ from .forms import (
     AccountEditForm,
     PaymentForm
 )
+from api.models import Bidders, Property
 from users.models import Account
 from django.conf import settings
 import stripe
@@ -25,9 +26,34 @@ def home_view(request):
 
     user = request.user
 
-    # should only have one match but just for precaution
+    current_bids = Bidders.objects.filter(userID=user.id)
+    user_properties = []
+
+    # Note, query sets of cache, so subsequent for loop calls will only execute once
+    for bid in current_bids:
+        user_properties.append(bid.biddingID)
+
+    # Creates a list of unique propertyID (since a user can have multiple bids on the same prop)
+    user_properties = list(set(user_properties))
+
+    # Query a set of properties that the user is watching
+    # DO NOT exclude the inactive ones, because they provide useful information as well
+    property_queryset = Property.objects.filter(propertyID__in=user_properties)
+    for prop in property_queryset:
+        print(prop.curPrice)
+
+    # 1) Search bidders for userID
+    # 2) from bidders, get the biddingID
+    # 3) from biddingID as the propertyID, get the property
+    # 4) From property, determine if user is first. If they are, add to one section
+    # -> If inactive + first, they won.
+    # -> if inactive + !first, they lost. (auction over?) ## Might not even need this
+    # -> if active, one section
+
+
+
     # accounts hold most of the properties
-    account_queryset = Account.objects.filter(user_id = user.id).first()
+    account_queryset = Account.objects.get(user_id = user.id)
     context = {
         "account": account_queryset,
     }
