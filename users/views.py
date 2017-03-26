@@ -39,9 +39,7 @@ def home_view(request):
     # Query a set of properties that the user is watching
     # DO NOT exclude the inactive ones, because they provide useful information as well
     property_queryset = Property.objects.filter(propertyID__in=user_properties)
-    # Might want to do a exlude(status="inactive" and user.id !== self.userID)
 
-    # accounts hold most of the properties
     account_queryset = Account.objects.get(user_id = user.id)
     context = {
         "account": account_queryset,
