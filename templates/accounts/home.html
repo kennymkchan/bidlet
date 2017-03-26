@@ -14,9 +14,7 @@
   <h2><b>Finished Auctions - Owned Properties</b></h2>
   <div class="sublets">
     {% for sublet in properties %}
-      <!-- Need to check if owner: inactive + top bid -->
-      <!-- consider adding a new property field called subletterID -->
-      {% if sublet.status == 'inactive' %}
+      {% if sublet.status == 'inactive' and user.id == sublet.tenantID %}
         <a href="/property/{{ sublet.propertyID }}/">
           <div class="sublet__item">
             <div class="sublet__image">
@@ -49,7 +47,7 @@
             {% if sublet.rooms %}
               <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
             {% endif %}
-            <div class="sublet__info">{{ sublet.city}}, {{ sublet.country }}</div>
+            <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
             <div class="sublet__info">{{ sublet.address }}</div>
           </div>
         </a>

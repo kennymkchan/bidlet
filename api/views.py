@@ -221,7 +221,7 @@ def chargeCustomer(request, userID, autoWin, propertyID):
         messages.success(
             request, 'Congratulations! You have won the auction!')
         Property.objects.filter(propertyID=propertyID).update(
-            status="inactive")
+            status="inactive", tenantID=userID)
         return redirect('/property/' + str(propertyID))
     except:
         messages.error(
