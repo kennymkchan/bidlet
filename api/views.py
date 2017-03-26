@@ -21,7 +21,7 @@ class Listings(APIView):
     template_name = 'listings.html'
 
     def get(self, request):
-        listings = Property.objects.filter().exclude(status="inactive")
+        listings = Property.objects.all().exclude(status="inactive")
         context = {
             'listings': listings,
             'CreatePropertyForm': CreatePropertyForm,
@@ -65,7 +65,7 @@ class Listings(APIView):
             orQuery = [Q(x) for x in orPredicates]
 
             if not andQuery and not orQuery:
-                listings = Property.objects.filter().exclude(status="inactive")
+                listings = Property.objects.all().exclude(status="inactive")
             else:
                 if andQuery:
                     and_listings = Property.objects.filter(
