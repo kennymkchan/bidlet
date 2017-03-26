@@ -14,7 +14,7 @@
   <h2><b>Finished Auctions - Owned Properties</b></h2>
   <div class="sublets">
     {% for sublet in properties %}
-      {% if sublet.status == 'inactive' and user.id == sublet.tenantID %}
+      {% if user.id == sublet.tenantID %}
         <a href="/property/{{ sublet.propertyID }}/">
           <div class="sublet__item">
             <div class="sublet__image">
