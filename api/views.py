@@ -85,7 +85,6 @@ class Listings(APIView):
 
 
 def createBid(request, propertyID=None):
-    context = {}
     bid = Bidding.objects.get(propertyID=propertyID)
     form = BidForm(request.POST or None, propID=bid.propertyID)
     if form.is_valid():
@@ -122,9 +121,9 @@ def createBid(request, propertyID=None):
             request, 'You are now the highest bidder @ $' + str(bid.bidPrice))
         return HttpResponseRedirect('/property/' + str(propertyID))
     else:
-        context['form'] = form
-        context['property'] = Property.objects.get(propertyID=propertyID)
-        return render(request, 'property.html', context)
+        messages.error(
+            request, 'Please increase your bid to over $' + str(bid.curPrice + 10))
+        return HttpResponseRedirect('/property/' + str(propertyID))
 
 
 def createProperty(request):
@@ -179,7 +178,7 @@ class propertyDetails(APIView):
         property = Property.objects.get(propertyID=id)
         bidding = Bidding.objects.get(propertyID=id)
         bidders = Bidders.objects.filter(biddingID=bidding.biddingID)
-        # , bidPrice=bidding.CurPrice
+
         form = BidForm(request.POST or None, propID=id)
         currentUser = bidders.last()
         if request.user.is_authenticated():

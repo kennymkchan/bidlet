@@ -2,11 +2,11 @@
 
 {% block content %}
 {% if messages %}
-  <ul class="messages">
+  <div class="messages">
     {% for message in messages %}
-      <li class="message-{{message.tags}}">{{ message }}</li>
+      <b class="message-{{message.tags}}">{{ message }}</b>
     {% endfor %}
-  </ul>
+  </div>
 {% endif %}
   <h1>Property Details</h1>
   <h2>{{ property.title}}</h2>
@@ -30,6 +30,7 @@
     <div class="property__info">{{ property.address }}</div>
 
     <h2>Bid Now</h2>
+    <p><b>Bidding ends on:</b> {{bidding.dateEnd|date:"d M Y"}} @ {{ bidding.dateEnd|time:"h:i A" }}</p>
     {% if user.is_authenticated %}
       {% if account == None %}
         <span>
@@ -44,7 +45,7 @@
         <form role="form" action="/bid/{{property.propertyID}}" method="post">
           {% csrf_token %}
           <label for="bidPrice">Your Bid Price:</label>
-          <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice }}">
+          <input id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice|add:'10'}}">
           <button type="submit">Submit</button>
         </form>
       {% endif %}
@@ -64,7 +65,7 @@
 </body>
 <style type="text/css">
 .property {
-  width: 300px;
+  width: auto;
   background-color: #fff;
   margin: 0 5px;
 }
