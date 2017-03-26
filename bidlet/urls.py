@@ -26,7 +26,7 @@ urlpatterns = [
     # Property Management
 	url(r'^listings/', Listings.as_view(), name='listings'),
 	url(r'^property/(?P<id>\d{1,})/$', propertyDetails.as_view(), name='property'),
-	url(r'^createProperty/', createProperty, name='create-property'),
+    url(r'^property/create', createProperty, name="create-property"),
 
     # Budding Management
     url(r'^bid/(?P<propertyID>\d{1,})', createBid, name='create-bid'),
