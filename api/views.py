@@ -196,7 +196,7 @@ class propertyDetails(APIView):
             'bidders': bidders,
             'form': form,
             'currentUser': currentUser,
-            'account': account
+            'payment': account
         }
         return Response(context)
 
