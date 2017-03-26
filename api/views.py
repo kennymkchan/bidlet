@@ -174,6 +174,11 @@ def createProperty(request):
         messages.success(request, 'Your new listing added!')
         return HttpResponseRedirect('/property/' + str(newProp.propertyID))
 
+    context = {
+        "CreatePropertyForm": form,
+    }
+
+    return render(request, 'property/create_property.html', context)
 
 class propertyDetails(APIView):
     renderer_classes = [TemplateHTMLRenderer]
