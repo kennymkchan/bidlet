@@ -11,7 +11,7 @@ from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
 from .models import Property, Bidding, Bidders
 from users.models import Account
 from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
-
+from datetime import datetime, timezone
 from django.conf import settings
 import stripe
 
@@ -105,8 +105,21 @@ def createBid(request, propertyID=None):
 
         biddingID = bid.biddingID
 
+        sublet = Property.objects.get(propertyID=biddingID)
+
+        # Make sure that the bid is still placeable, and auction has not ended
+        # Accounts for the edge case the user has the page open but auction
+        # ends
         try:
-            autoWin = Property.objects.get(propertyID=biddingID).autoWinPrice
+            if datetime.now(timezone.utc) > bid.dateEnd:
+                messages.error(
+                    request, 'Error 800: Auction is over, unable to place bid')
+                return HttpResponseRedirect('/property/' + str(propertyID))
+        except:
+            pass
+
+        try:
+            autoWin = sublet.autoWinPrice
         except:
             autoWin = None
 
@@ -190,13 +203,19 @@ class propertyDetails(APIView):
             account = Account.objects.get(user_id=request.user.id).stripe_id
         else:
             account = None
+
+        if datetime.now(timezone.utc) > bidding.dateEnd:
+            can_bid = False
+        else:
+            can_bid = True
         context = {
             'property': property,
             'bidding': bidding,
             'bidders': bidders,
             'form': form,
             'currentUser': currentUser,
-            'payment': account
+            'payment': account,
+            'can_bid': can_bid,
         }
         return Response(context)
 

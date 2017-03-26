@@ -12,6 +12,11 @@
       {% endfor %}
     </div>
   {% endif %}
+  {% if  property.status and property.status == "inactive" or not can_bid %}
+    <div class="message-auction-over">
+      <span><b>Auction is over. This property is inactive</b></span>
+    </div>
+  {% endif %}
     <h1>Property Details</h1>
     <h2>{{ property.title}}</h2>
     <div class="property">
@@ -36,7 +41,7 @@
       <h2>Bid Now</h2>
       <p><b>Bidding ends on:</b> {{bidding.dateEnd|date:"d M Y"}} @ {{ bidding.dateEnd|time:"h:i A" }}</p>
       {% if user.is_authenticated %}
-        {% if property.status and property.status == "inactive" %}
+        {% if property.status and property.status == "inactive" or not can_bid%}
           <span class="bid--property-inactive">
             Auction is over. Check out other listings
             <a href="/listings">here</a>
