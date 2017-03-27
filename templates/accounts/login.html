@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="/static/account/login.css" />
+{% endblock %}
 
 {% block content %}
-  <h1>{{title}}</h1>
-  <!-- <h2>Login</h2> -->
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button class="button button--login" type="submit" value="{{title}}">Login</button>
-      <a href="/register" class="button--register">
-        Don't have an account? Register here.
-      </a>
-    </form>
-  <br>
+  <div class="login-page">
+    <div class="login-form-container">
+      <form method="post" class="login-form">
+        <h1 class="login-header">Sign In</h1>
+        {% csrf_token %}
+        {{ form.username|attr:"placeholder:Username"|add_class:"field--login" }}
+        {{ form.password|attr:"placeholder:Password"|add_class:"field--login"}}
+        <button class="button--login" type="submit" value="{{title}}">Login</button>
+        <p class="register-message">
+          Don't have an account?
+          <a class="sign-up-text" href="/register">Create an account</a>
+        </p>
+      </form>
+    </div>
+  </div>
 {% endblock %}
