@@ -46,7 +46,7 @@
       <h2>Bid Now</h2>
       <p><b>Bidding ends on:</b> {{bidding.dateEnd|date:"d M Y"}} @ {{ bidding.dateEnd|time:"h:i A" }}</p>
       {% if user.is_authenticated %}
-        {% if property.status and property.status == "inactive" or not can_bid%}
+        {% if property.status and property.status == "inactive" or not can_bid %}
           <span class="bid--property-inactive">
             Auction is over. Check out other listings
             <a href="/listings">here</a>
