@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 from django.conf import settings
 
 currentTime = datetime.now()
-pastHour = currentTime + timedelta(days=10)
+pastHour = currentTime - timedelta(hours=1)
 
-biddingObj = Bidding.objects.filter(dateEnd__range=(currentTime, pastHour))
+biddingObj = Bidding.objects.filter(dateEnd__range=(pastHour, currentTime))
 
 # sublets should contain a list of unique property id
 for bid in biddingObj:
