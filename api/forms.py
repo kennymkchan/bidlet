@@ -24,17 +24,37 @@ class CreatePropertyForm(forms.Form):
 	description = forms.CharField(initial="Best place ever")
 	address = forms.CharField(initial="200 University ave")
 	country = forms.CharField(initial="Canada")
-	city = forms.CharField(initial="Waterloo")
+	city = forms.CharField(initial="Waterloo", required=False)
 	postalCode = forms.CharField(initial="L3R6Y7")
-	suite = forms.IntegerField(initial=400)
-	image = forms.CharField(initial="http://www.hawkswap.com/wp-content/uploads/2012/08/438421.jpg")
+	suite = forms.IntegerField(initial=400, required=False)
+	image = forms.CharField(initial="http://www.hawkswap.com/wp-content/uploads/2012/08/438421.jpg", required=False)
 	startPrice = forms.DecimalField(initial=600)
 	autoWinPrice = forms.DecimalField(initial=800, required=False)
 	dateStart = forms.DateTimeField(initial=datetime.now())
 	dateEnd = forms.DateTimeField(initial=datetime.now()+timedelta(days=10))
 	availStart = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=4))
-	availEnd = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=20))
+	availEnd = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=20), required=False)
 	rooms = forms.IntegerField(initial=1)
+
+	def clean_autoWinPrice(self):
+		auto_win = self.cleaned_data.get("autoWinPrice")
+		if auto_win <= self.cleaned_data.get("startPrice"):
+			raise forms.ValidationError("Auto win cannot be less than start price")
+		return auto_win
+
+	def clean_dateEnd(self):
+		dateStart = self.cleaned_data.get("dateStart")
+		dateEnd = self.cleaned_data.get("dateEnd")
+		if dateEnd < dateStart:
+			raise forms.ValidationError("Please select an auction end date after the start date")
+		return dateEnd
+
+	def clean_availEnd(self):
+		availStart = self.cleaned_data.get("availStart")
+		availEnd = self.cleaned_data.get("availEnd")
+		if availEnd < availStart:
+			raise forms.ValidationError("Please select an contract end date after the start date")
+		return availEnd
 
 class EditPropertyForm(forms.Form):
 	title = forms.CharField(required=False)
