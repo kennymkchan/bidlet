@@ -13,9 +13,13 @@
         {% csrf_token %}
 
         {% for error, message in form.errors.items %}
-          <p>{{message}}</p>
+          <!-- for validation errors thrown -->
+          {% if error == "__all__"%}
+            <p>{{message}}</p>
+          {% endif %}
         {% endfor %}
 
+        {{ form.username.errors }}
         {{ form.username|attr:"placeholder:Username"|add_class:"field--login" }}
         {{ form.password.errors }}
         {{ form.password|attr:"placeholder:Password"|add_class:"field--login"}}
