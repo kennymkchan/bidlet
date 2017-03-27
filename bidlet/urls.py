@@ -16,7 +16,8 @@ from api.views import (
     createBid,
     createProperty,
     propertyDetails,
-    Listings
+    Listings,
+    property_edit_view
     )
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
 	url(r'^listings/', Listings.as_view(), name='listings'),
 	url(r'^property/(?P<id>\d{1,})/$', propertyDetails.as_view(), name='property'),
     url(r'^property/create', createProperty, name="create-property"),
+    url(r'^property/(?P<propertyID>\d{1,})/edit', property_edit_view, name="edit-property"),
 
     # Budding Management
     url(r'^bid/(?P<propertyID>\d{1,})', createBid, name='create-bid'),

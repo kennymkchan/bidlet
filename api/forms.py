@@ -36,6 +36,15 @@ class CreatePropertyForm(forms.Form):
 	availEnd = forms.DateTimeField(initial=datetime.now()+timedelta(weeks=20))
 	rooms = forms.IntegerField(initial=1)
 
+class EditPropertyForm(forms.Form):
+	title = forms.CharField(required=False)
+	description = forms.CharField(required=False)
+	address = forms.CharField(required=False)
+	country = forms.CharField(required=False)
+	city = forms.CharField(required=False)
+	postalCode = forms.CharField(required=False)
+	# image = forms.CharField(required=False)
+
 class SearchPropertyForm(forms.Form):
 	keyword = forms.CharField(required=False)
 	country = forms.CharField(required=False)
