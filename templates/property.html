@@ -18,6 +18,11 @@
     </div>
   {% endif %}
     <h1>Property Details</h1>
+
+    {% if user.is_authenticated and user.id == property.ownerID%}
+      <span><a href="/property/{{property.propertyID}}/edit">Edit</a> the property</span>
+    {% endif %}
+
     <h2>{{ property.title}}</h2>
     <div class="property">
       <div class="property__image">

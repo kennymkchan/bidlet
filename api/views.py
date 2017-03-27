@@ -7,9 +7,10 @@ from django.db.models import Q
 from functools import reduce
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import BidForm, CreatePropertyForm, SearchPropertyForm
+from .forms import BidForm, CreatePropertyForm, SearchPropertyForm, EditPropertyForm
 from .models import Property, Bidding, Bidders
 from users.models import Account
+from django.contrib.auth.decorators import login_required
 from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
 from datetime import datetime, timezone
 from django.conf import settings
@@ -89,6 +90,7 @@ class Listings(APIView):
         return Response(context)
 
 
+@login_required(login_url="/login/")
 def createBid(request, propertyID=None):
     bid = Bidding.objects.get(propertyID=propertyID)
     form = BidForm(request.POST or None, propID=bid.propertyID)
@@ -144,6 +146,7 @@ def createBid(request, propertyID=None):
         return HttpResponseRedirect('/property/' + str(propertyID))
 
 
+@login_required(login_url="/login/")
 def createProperty(request):
     form = CreatePropertyForm(request.POST or None)
 
@@ -192,6 +195,63 @@ def createProperty(request):
     }
 
     return render(request, 'property/create_property.html', context)
+
+
+@login_required(login_url="/login/")
+def property_edit_view(request, propertyID=None):
+    user = request.user
+
+    property_queryset = Property.objects.get(propertyID=propertyID)
+
+    # Make sure the user is the owner
+    if user.id != property_queryset.ownerID:
+        messages.success(
+            request, 'Access Restricted! Cannot access this property')
+        return HttpResponseRedirect('/property/' + str(property_queryset.propertyID))
+
+    # Without None, it will always be initialized with a post (tries to post
+    # to db)
+    propertyEditForm = EditPropertyForm(
+        request.POST or None, request.FILES or None)
+
+    propertyEditForm.fields["title"].initial = property_queryset.title
+    propertyEditForm.fields["description"].initial = property_queryset.description
+    propertyEditForm.fields["address"].initial = property_queryset.address
+    propertyEditForm.fields["country"].initial = property_queryset.country
+    propertyEditForm.fields["city"].initial = property_queryset.city
+    propertyEditForm.fields["postalCode"].initial = property_queryset.postalCode
+    # TODO: Consider adding image change capabilities
+
+    if propertyEditForm.is_valid():
+
+        title = propertyEditForm.cleaned_data['title']
+        description = propertyEditForm.cleaned_data['description']
+        address = propertyEditForm.cleaned_data['address']
+        country = propertyEditForm.cleaned_data['country']
+        city = propertyEditForm.cleaned_data['city']
+        postalCode = propertyEditForm.cleaned_data['postalCode']
+
+        try:
+            Property.objects.filter(propertyID=propertyID).update(
+                title=title, description=description,
+                address=address, country=country,
+                city=city, postalCode=postalCode,
+            )
+
+            messages.success(request, 'Information updated successfully!')
+            return HttpResponseRedirect('/property/' + str(property_queryset.propertyID))
+
+        except:
+            messages.eroor(
+                request, 'An error has occured. Please contact system admins!')
+            return HttpResponseRedirect('/property/' + str(property_queryset.propertyID))
+
+    context = {
+        "propertyEditForm": propertyEditForm,
+        "sublet": property_queryset,
+    }
+    return render(request, 'property/edit_property.html', context)
+
 
 class propertyDetails(APIView):
     renderer_classes = [TemplateHTMLRenderer]
