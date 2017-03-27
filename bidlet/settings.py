@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'webpack_loader',
     'api',
+    'widget_tweaks',
     'users', # For user accounts
 ]
 
