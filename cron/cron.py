@@ -1,8 +1,3 @@
-# import os
-# import django
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bidlet.settings")
-# django.setup()
-
 # Use this command to run
 # cmd.exe /c "python manage.py shell < cron/cron.py"
 import stripe
@@ -36,10 +31,6 @@ property_queryset = Property.objects.filter(
 
 # Set all these properties to inactive
 property_queryset.update(status="inactive")
-
-#continue
-
-print(property_queryset)
 
 for user, place in zip(users, property_queryset):
     if user is None:

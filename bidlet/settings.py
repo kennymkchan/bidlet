@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'webpack_loader',
     'api',
-    'django_cron',
     'widget_tweaks',
     'users', # For user accounts
 ]
