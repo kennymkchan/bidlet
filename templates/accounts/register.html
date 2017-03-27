@@ -1,32 +1,44 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="/static/account/register.css" />
+{% endblock %}
 
 {% block content %}
 
-  <style>
-    .register-form-container {
-      text-align: center;
-    }
+  <div class="register-page">
+    <div class="register-form-container">
+      <form method="post" class="register-form">
+        <h1 class="register-header">{{title}}</h1>
+        {% csrf_token %}
 
-    .button--register {
-      text-align: center;
-      width: 150px;
-      text-transform: uppercase;
-    }
-  </style>
+        {% for error, message in form.errors.items %}
+          <!-- for validation errors thrown -->
+          {% if error == "__all__"%}
+            <p>{{message}}</p>
+          {% endif %}
+        {% endfor %}
 
+        {{ user_form.username.errors }}
+        {{ user_form.username|attr:"placeholder:Username"|add_class:"field--register" }}
+        {{ user_form.email.errors }}
+        {{ user_form.email|attr:"placeholder:Email"|add_class:"field--register"}}
+        {{ user_form.email2.errors }}
+        {{ user_form.email2|attr:"placeholder:Confirm Email"|add_class:"field--register" }}
+        {{ user_form.password.errors }}
+        {{ user_form.password|attr:"placeholder:Password"|add_class:"field--register"}}
+        {{ user_form.password2.errors }}
+        {{ user_form.password2|attr:"placeholder:Confirm Password"|add_class:"field--register" }}
+        {{ user_form.first_name.errors }}
+        {{ user_form.first_name|attr:"placeholder:First Name"|add_class:"field--register"}}
+        {{ user_form.last_name.errors }}
+        {{ user_form.last_name|attr:"placeholder:Last Name"|add_class:"field--register"}}
+        {{ account_form.birth_date.errors }}
+        {{ account_form.birth_date|attr:"placeholder:Date of Birth"|add_class:"field--register"}}
 
-  <div class="register-form-container">
-    <h1>{{title}}</h1>
-    <form method="post">
-      {% csrf_token %}
-
-      <!-- <label for="id_username">Username:</label>
-      <input id="id_username" maxlength="30" name="username" type="text">
-      <span class="helptext">Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.</span> -->
-
-      {{ user_form.as_p }}
-      {{ account_form.as_p }}
-      <button class="button button--register" type="submit" value="{{title}}">Register</button>
-    </form>
+        <button class="button--register" type="submit" value="{{title}}">Register</button>
+      </form>
+    </div>
   </div>
 {% endblock %}
