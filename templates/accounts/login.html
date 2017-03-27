@@ -11,7 +11,17 @@
       <form method="post" class="login-form">
         <h1 class="login-header">Sign In</h1>
         {% csrf_token %}
+
+        {% for error, message in form.errors.items %}
+          <!-- for validation errors thrown -->
+          {% if error == "__all__"%}
+            <p>{{message}}</p>
+          {% endif %}
+        {% endfor %}
+
+        {{ form.username.errors }}
         {{ form.username|attr:"placeholder:Username"|add_class:"field--login" }}
+        {{ form.password.errors }}
         {{ form.password|attr:"placeholder:Password"|add_class:"field--login"}}
         <button class="button--login" type="submit" value="{{title}}">Login</button>
         <p class="register-message">
