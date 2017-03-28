@@ -14,7 +14,6 @@
         {% csrf_token %}
 
         {% for error, message in form.errors.items %}
-          <!-- for validation errors thrown -->
           {% if error == "__all__"%}
             <p>{{message}}</p>
           {% endif %}
