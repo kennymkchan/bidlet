@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block styles %}
+  <link rel="stylesheet" type="text/css" href="/static/account/payment.css" />
 {% endblock %}
 
 
 {% block content %}
-  <h2>Welcome to payments!</h2>
+  <!-- <a href="/user/edit">Edit Profile</a> -->
 
-  <h3>Here, you can find the ability to edit your payment methods</h3>
-
-  <a href="/user/edit">Edit Profile</a>
+  <a href="/user/edit" class="back-to-profile">
+    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+  </a>
 
   {% if messages %}
     <ul class="messages">
@@ -19,12 +21,29 @@
     </ul>
   {% endif %}
 
-  <form method="post">
-    {% csrf_token %}
-    {{ paymentForm.as_p }}
-    <button type="submit" value="{{title}}">Save</button>
-    <a href="/home"><button type="button" value="{{title}}">Return to Profile</button></a>
-  </form>
+  <div class="credit-card">
+    <form method="post">
+      <h2 class="payment-header">Credit Card Details</h2>
+      {% csrf_token %}
+      <div class="card-number-field">
+        {{ paymentForm.number.errors }}
+        {{ paymentForm.number|attr:"placeholder:Card Number"|add_class:"cc-field card-number"}}
+      </div>
+      <div class="date">
+        {{ paymentForm.exp_month.errors }}
+        {{ paymentForm.exp_month|attr:"placeholder: Exp Month"|add_class:"cc-field cc-month"}}
+        {{ paymentForm.exp_year.errors }}
+        {{ paymentForm.exp_year|attr:"placeholder: Exp Year"|add_class:"cc-field cc-month"}}
+      </div>
+      <div class="cvv-field">
+        {{ paymentForm.cv.errors }}
+        {{ paymentForm.cv|attr:"placeholder:CVV"|add_class:"cc-field cc-cvv"}}
+      </div>
+      <div class="save-button-container">
+        <button class="button--save-payment" type="submit" value="{{title}}">Save</button>
+      </div>
+    </form>
+  </div>
 
 
 {% endblock %}

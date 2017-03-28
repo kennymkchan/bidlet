@@ -1,0 +1,91 @@
+.credit-card {
+    width: 360px;
+    height: auto;
+    margin: 60px auto 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #878787;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25), 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.payment-header {
+    height: 40px;
+    border-bottom: 1px solid #C1C1C1;
+    padding: 0px 25px;
+}
+
+.cc-field {
+  border-radius: 7px;
+}
+
+.card-number-field {
+  padding-top: 15px;
+}
+
+.card-number {
+  width: 80%;
+  display: block;
+  font-size: 14px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  border: 2px solid #C1C1C1;
+  border-radius: 7px;
+}
+
+.date {
+  padding-top: 30px;
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cc-month {
+  margin-right: 10px;
+  flex: 1 0 0;
+  height: 40px;
+}
+
+.cc-year {
+  flex: 1 0 0;
+  height: 40px;
+}
+
+.cvv-field {
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 30px;
+  display: block;
+}
+
+.cc-cvv {
+  display: block;
+  width: 50%;
+  padding: 10px 20px;
+  border: 2px solid #C1C1C1;
+}
+
+.save-button-container {
+  padding-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button--save-payment {
+  text-align: center;
+  display: block;
+  width: 200px;
+  height: 40px;
+}
+
+.back-to-profile {
+  text-decoration: none;
+  color: #C1C1C1;
+  font-size: 40px;
+  position: absolute;
+  top: 70px;
+  left: 50px;
+}
