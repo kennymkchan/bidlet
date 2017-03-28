@@ -5,56 +5,97 @@
 {% endblock %}
 
 {% block content %}
-  <p>Hello {{ user.first_name}}! </p>
 
-  <h2><b>Recently Finished Auctions</b></h2>
-  <div class="sublets">
-    {% for sublet in properties %}
-      {% if user.id == sublet.tenantID %}
-        <a href="/property/{{ sublet.propertyID }}/">
-          <div class="sublet__item">
-            <div class="sublet__image">
-              <img src="{{ sublet.image}}">
-            </div>
-            <span class="sublet__price">${{ sublet.curPrice|default:sublet.startPrice|floatformat:"0"}} CAD</span>
-            <div class="sublet__title">{{ sublet.title}}</div>
-            {% if sublet.rooms %}
-              <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
-            {% endif %}
-            <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
-            <div class="sublet__info">{{ sublet.address }}</div>
-          </div>
-        </a>
+  <div class="profile-container">
+
+    <div class="profile-info">
+      <a href="/user/edit" class="edit--button">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </a>
+      <div class="profile-name">
+        {{user.first_name | title}} {{user.last_name | title}}
+      </div>
+      <div class="profile-image">
+        <img class="no-profile" src="/static/assets/images/no-profile.png"/>
+      </div>
+      <div class="profile-elements">
+        <p class="profile-element-header">Description: </p>
+        <span>{{account.profile_description}}</span>
+      </div>
+      <div class="profile-elements">
+        <p class="profile-element-header">Contact Number: </p>
+        <span>{{account.phone_number}}</span>
+      </div>
+      <div class="profile-elements">
+        <p class="profile-element-header">Location: </p>
+        <span>{{account.user_location}}</span>
+      </div>
+      <!-- <div class="profile-elements">
+        <p class="profile-element-header">Preferred Language: </p>
+        <span>{{account.preferred_language}}</span>
+      </div> -->
+      <div class="profile-elements">
+        <p class="profile-element-header">Date of Birth: </p>
+        <span>{{account.birth_date}}</span>
+      </div>
+      {% if not user.stripe_id %}
+        <div class="no-cc-connected">
+          <p class="profile-element-header">
+            ** No valid credit card is connected.
+            <br>
+            Please add one <a class="text-underline" href="/user/payments">here</a>
+          </p>
+        </div>
       {% endif %}
-    {% endfor %}
+    </div>
+
+    <div class="profile-property">
+      <h2 class="profile-section-heading"><b>Recently Finished Auctions</b></h2>
+      <hr class="profile-section-underline"/>
+      <div class="sublets">
+        {% for sublet in properties %}
+          {% if user.id == sublet.tenantID %}
+            <a href="/property/{{ sublet.propertyID }}/">
+              <div class="sublet__item">
+                <div class="sublet__image">
+                  <img src="{{ sublet.image}}">
+                </div>
+                <span class="sublet__price">${{ sublet.curPrice|default:sublet.startPrice|floatformat:"0"}} CAD</span>
+                <div class="sublet__title">{{ sublet.title}}</div>
+                {% if sublet.rooms %}
+                  <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
+                {% endif %}
+                <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
+                <div class="sublet__info">{{ sublet.address }}</div>
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <h2 class="profile-section-heading"><b>Currently Watching</b></h2>
+      <hr class="profile-section-underline"/>
+      <div class="sublets">
+        {% for sublet in properties %}
+          {% if sublet.status == 'active' or sublet.status == None %}
+            <a href="/property/{{ sublet.propertyID }}/">
+              <div class="sublet__item">
+                <div class="sublet__image">
+                  <img src="{{ sublet.image}}">
+                </div>
+                <span class="sublet__price">${{ sublet.curPrice|default:sublet.startPrice|floatformat:"0"}} CAD</span>
+                <div class="sublet__title">{{ sublet.title}}</div>
+                {% if sublet.rooms %}
+                  <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
+                {% endif %}
+                <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
+                <div class="sublet__info">{{ sublet.address }}</div>
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
   </div>
 
-  <h2><b>Currently Watching</b></h2>
-  <div class="sublets">
-    {% for sublet in properties %}
-      {% if sublet.status == 'active' or sublet.status == None %}
-        <a href="/property/{{ sublet.propertyID }}/">
-          <div class="sublet__item">
-            <div class="sublet__image">
-              <img src="{{ sublet.image}}">
-            </div>
-            <span class="sublet__price">${{ sublet.curPrice|default:sublet.startPrice|floatformat:"0"}} CAD</span>
-            <div class="sublet__title">{{ sublet.title}}</div>
-            {% if sublet.rooms %}
-              <div class="sublet__info">{{ sublet.rooms}} Rooms</div>
-            {% endif %}
-            <div class="sublet__info">{{ sublet.city }}, {{ sublet.country }}</div>
-            <div class="sublet__info">{{ sublet.address }}</div>
-          </div>
-        </a>
-      {% endif %}
-    {% endfor %}
-  </div>
-
-  <a href="/user/edit" class="button button--edit-profile">
-    Edit profile
-  </a>
-  <a href="/logout" class="button button--logout">
-    Logout
-  </a>
 {% endblock %}

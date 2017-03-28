@@ -5,20 +5,51 @@
 
 .sublets {
   margin: 0 auto;
-  width: 1000px;
+  width: 100%;
   height: auto;
   display: flex;
-  align-items: stretch;
-  align-content: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
   margin-bottom: 50px;
 }
 
 .sublet__item {
-  width: 300px;
-  background-color: #fff;
-  margin: 10px 10px;
+  background: #FFFFFF;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15), 0 10px 10px 0 rgba(0, 0, 0, 0.05);
+  width: 160px;
+  min-height: 200px;
+  max-width: 360px;
+  margin: 30px 15px;
+  position: relative;
+}
+
+.sublet__info {
+  font-size: 12px;
+  color: #333;
+}
+
+.sublet__title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.sublet__price {
+  color: #6aa74c;
+  font-weight: bold;
+  font-size: 14px;
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+}
+
+.sublet__image {
+  margin: 0 auto;
+  width: 160px;
+  height: 140px;
+  margin-bottom: 20px;
 }
 
 .sublet__image img {
@@ -26,23 +57,79 @@
   height: 100%;
 }
 
-.sublet__info {
-  color: #333;
+
+.profile-container {
+  display: flex;
 }
 
-.sublet__title {
-  font-weight: bold;
-  font-size: 25px;
+.profile-property {
+  flex: 2 0 0;
 }
 
-.sublet__price {
+.profile-section-heading {
   color: #6aa74c;
-  font-weight: bold;
-  font-size: 30px;
+  margin-left: 20px;
 }
 
-.sublet__image {
-  width: 300px;
-  height: 250px;
-  margin-bottom: 10px;
+.profile-section-underline {
+  width: 95%;
+}
+
+
+.profile-info {
+  border-right: 1px solid #d7d7d7;
+  flex: 1 0 0;
+  position: relative;
+}
+
+.profile-name {
+  /*text-align: center;*/
+  font-size: 40px;
+  color: #6aa74c;
+}
+
+.profile-image {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.no-profile {
+  border-radius: 50%;
+  height: 210px;
+  width: 210px;
+}
+
+.profile-elements {
+  margin-top: 30px;
+}
+
+.profile-element-header {
+  font-size: 15px;
+  font-weight: bold;
+  color: #6aa74c;
+}
+
+.fa-pencil {
+  position: absolute;
+  font-size: 30px;
+  right: 15px;
+  top: 13px;
+  cursor: pointer;
+}
+
+.profile-info a {
+  color: inherit;
+}
+
+.edit--button:visited {
+  text-decoration: none;
+  color: black;
+}
+
+.no-cc-connected {
+  margin-top: 60px;
+}
+
+.text-underline {
+  text-decoration: underline;
 }
