@@ -101,12 +101,13 @@
 
 .profile-elements {
   margin-top: 30px;
+  width: 90%;
 }
 
 .profile-element-header {
   font-size: 15px;
   font-weight: bold;
-  color: #6aa74c;
+  color: black;
 }
 
 .fa-pencil {

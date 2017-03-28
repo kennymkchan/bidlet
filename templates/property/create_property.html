@@ -10,7 +10,7 @@
 <div class="create-page">
   <div class="create-form-container">
     <form method="post" class="create-form">
-      <h1 class="create-header">Create Property</h1>
+      <h2 class="create-header">Create Property</h2>
       {% csrf_token %}
       {% for error, message in form.errors.items %}
         {% if error == "__all__"%}

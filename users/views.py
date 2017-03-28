@@ -25,42 +25,6 @@ from users.models import Account
 from django.conf import settings
 import stripe
 
-# def index_view(request):
-#     form = SearchPropertyForm(request.POST or None)
-#     if form.is_valid():
-#         andPredicates = []
-#         city = form.cleaned_data['city']
-#         rooms = form.cleaned_data['rooms']
-#         availStart = form.cleaned_data['availStart']
-#
-#         if city:
-#             andPredicates.append(('city__icontains', city))
-#         if rooms:
-#             andPredicates.append(('rooms__exact', rooms))
-#         if availStart:
-#             andPredicates.append(('availStart__lte', availStart))
-#
-#         andQuery = [Q(x) for x in andPredicates]
-#
-#         if not andQuery:
-#             listings = Property.objects.all().exclude(status="inactive")
-#         else:
-#             if andQuery:
-#                 and_listings = Property.objects.filter(
-#                     reduce(operator.and_, andQuery)).exclude(status="inactive")
-#                 listings = and_listings
-#         search = {"AND": andPredicates}
-#
-#     context = {
-#         # 'listings': listings,
-#         'SearchPropertyForm': SearchPropertyForm,
-#         # 'search': search,
-#     }
-#
-#     return Response(context)
-
-
-
 @login_required(login_url="/login/")
 def home_view(request):
 
@@ -105,6 +69,7 @@ def profile_edit_view(request):
 
         # Reset the form to remove all the errors
         accountEditForm = AccountEditForm(request.POST or None, request.FILES or None)
+        messages.success(request, 'Profile Information Updated!')
         return redirect('/user/edit')
 
     context = {

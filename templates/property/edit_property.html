@@ -1,16 +1,44 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block styles %}
-  <link rel="stylesheet" type="text/css" href="/static/property/listing.css" />
+  <link rel="stylesheet" type="text/css" href="/static/property/edit_property.css" />
 {% endblock %}
 
 {% block content %}
 
-<div class="createProperty">
-  <h2>Edit Property</h2>
-  <form role="form" method="post">
-    {% csrf_token %} {{ propertyEditForm }}
-    <button type="submit">Submit</button>
-  </form>
+<div class="edit-page">
+  <div class="edit-form-container">
+    <form role="form" method="post" class="edit-form">
+      <h2 class="edit-header">Edit Existing Property</h2>
+      {% csrf_token %}
+
+      <label class="field-title">Title: </label>
+      {{ propertyEditForm.title.errors }}
+      {{ propertyEditForm.title|attr:"placeholder:Title"|add_class:"field--edit" }}
+
+      <label class="field-title">Description: </label>
+      {{ propertyEditForm.description.errors }}
+      {{ propertyEditForm.description|attr:"placeholder:Description"|add_class:"field--edit"}}
+
+      <label class="field-title">Address: </label>
+      {{ propertyEditForm.address.errors }}
+      {{ propertyEditForm.address|attr:"placeholder:Address"|add_class:"field--edit" }}
+
+      <label class="field-title">Country: </label>
+      {{ propertyEditForm.country.errors }}
+      {{ propertyEditForm.country|attr:"placeholder:Country"|add_class:"field--edit"}}
+
+      <label class="field-title">City: </label>
+      {{ propertyEditForm.city.errors }}
+      {{ propertyEditForm.city|attr:"placeholder:City"|add_class:"field--edit" }}
+
+      <label class="field-title">Postal Code: </label>
+      {{ propertyEditForm.postalCode.errors }}
+      {{ propertyEditForm.postalCode|attr:"placeholder:Postal Code"|add_class:"field--edit"}}
+
+      <button class="button--edit " type="submit">Save</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

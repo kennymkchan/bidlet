@@ -38,7 +38,7 @@
         <p class="profile-element-header">Date of Birth: </p>
         <span>{{account.birth_date}}</span>
       </div>
-      {% if not user.stripe_id %}
+      {% if not account.stripe_id %}
         <div class="no-cc-connected">
           <p class="profile-element-header">
             ** No valid credit card is connected.
