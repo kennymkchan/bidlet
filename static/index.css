@@ -1,3 +1,4 @@
+/**** New *****/
 
 .home-container {
   height: auto;
@@ -8,14 +9,14 @@
 }
 
 .hero-heading {
-  color: #6aa74c;
+  color: white;
   font-size: 49px;
 }
 
 .hero-subhead {
   margin: 0;
   font-size: 24px;
-  color: #737373;
+  color: #ececec;
 }
 
 .search-form {
@@ -28,10 +29,44 @@
   min-width: 240px;
 }
 
-.cta-container {
-  margin-top: 30px;
+.hero--index {
+  height: 550px;
+  width: 100%;
+  background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('/static/assets/hero/home.jpg') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+.hero--content-container {
+  padding-top: 40px;
+  width: 100%;
   text-align: center;
 }
 
-.button--cta {
+.section--heading {
+  font-size: 45px;
+  text-align: center;
+  margin-top: 90px;
+  margin-bottom: 60px;
+}
+
+.section--testimonials {
+  margin: 0 auto;
+  width: 90%;
+  height: auto;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.home--testimonials {
+  width: 300px;
+  min-height: 300px;
+}
+
+.fa-star {
+  font-size: 20px;
+  color: #13c098;
 }

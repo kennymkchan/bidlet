@@ -1,0 +1,55 @@
+.create-page {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.create-form {
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 80px 0;
+  padding: 45px;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25), 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.create-form label {
+  text-align: left;
+}
+
+.create-header {
+  margin: 0 0 30px 0;
+  padding: 0;
+  color: #6aa74c;
+  text-align: center;
+}
+
+.field--create {
+  font-size: 14px;
+  background: #F4F4F4;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  margin: 0 0 20px 0;
+  padding: 15px;
+}
+
+.field--create:active,
+.field--create:focus {
+  outline: 1px solid #6aa74c;
+}
+
+.button--create {
+  background: #6aa74c;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.field-title {
+  line-height: 30px;
+  color: #6aa74c;
+}
