@@ -8,10 +8,14 @@
   <h2>Welcome to profile edit!</h2>
 
   {% if messages %}
-    <div class="messages">
-      {% for message in messages %}
-        <b class="message-{{message.tags}}">{{ message }}</b>
-      {% endfor %}
+    <div class="messages" id="messages">
+      <div class="message-container">
+        <h3 class="message-title">Notifications</h3>
+        <i onclick="closeNotification()" class="fa fa-times fa-2x notification-close" aria-hidden="true"></i>
+        {% for message in messages %}
+          <p class="message message-{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+      </div>
     </div>
   {% endif %}
 

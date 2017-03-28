@@ -13,23 +13,31 @@
 
 {% block content %}
   {% if messages %}
-    <div class="messages">
-      {% for message in messages %}
-        <b class="message-{{message.tags}}">{{ message }}</b>
-      {% endfor %}
+    <div class="messages" id="messages">
+      <div class="message-container">
+        <h3 class="message-title">Notifications</h3>
+        <i onclick="closeNotification()" class="fa fa-times fa-2x notification-close" aria-hidden="true"></i>
+        {% for message in messages %}
+          <p class="message message-{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+      </div>
     </div>
   {% endif %}
 
   {% if  property.status and property.status == "inactive" or not can_bid %}
     <div class="message-auction-over">
-      <span><b>Auction is over. This property is inactive</b></span>
+      <span><b>** Auction is over. This property is inactive **</b></span>
     </div>
   {% endif %}
 
-  <!-- {% if user.is_authenticated and user.id == property.ownerID%}
-    <span><a href="/property/{{property.propertyID}}/edit">Edit</a> the property</span>
+  {% if user.is_authenticated and user.id == property.ownerID %}
+    <a href="/property/{{property.propertyID}}/edit" class="edit-property">
+      <div class="button--sticky button--edit-property">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </div>
+    </a>
   {% endif %}
- -->
+
   <div class="property-info-container">
     <div class="property-details">
     <h2 class="property__title">{{ property.title}}</h2>
@@ -61,46 +69,47 @@
     <div class="bid">
       <span class="property__price">${{ property.curPrice|default:property.startPrice|floatformat:"0"}}</span>
       <span class="property__price--label">Current Price</span>
-      <br><br>
+      <br><br><br>
       {% if property.autoWinPrice%}
-        <br>
-        <span class="">Auto Win: ${{ property.autoWinPrice|default:property.startPrice|floatformat:"0"}} CAD</span>
-        <br>
+        <span class="property__price-auto">${{ property.autoWinPrice|default:property.startPrice|floatformat:"0"}} CAD</span>
+        <span class="property__price--label-auto">Instant Win</span>
       {% endif %}
-      <p class="bidding-end"><b>Bidding ends:</b> {{bidding.dateEnd|date:"d M Y"}} @ {{ bidding.dateEnd|time:"h:i A" }}</p>
-      {% if user.is_authenticated %}
-        {% if property.status and property.status == "inactive" or not can_bid %}
-          <span class="bid--property-inactive">
-            Auction is over. Check out other listings
-            <a href="/listings">here</a>
-          </span>
-        {% elif payment == None %}
-          <span>
-            No Credit Card Attached. Please update payments method
-            <a href="/user/payments">here</a>
-          </span>
-        {% elif user.id == property.ownerID %}
-          <p class="user--is-owner">You cannot bid on your own property</p>
-        {% elif user.id == currentUser.userID %}
-          <p class="user--current-bid">You are currently the top bid!</p>
-        {% else %}
-          <form role="form" action="/bid/{{property.propertyID}}" method="post">
-            {% csrf_token %}
-            <input class="bid-field" id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice|add:'10'}}">
-            <button class="button--bid" type="submit">Submit</button>
-          </form>
+      <div class="form--bid">
+        <p class="bidding-end"><b>Bidding ends:</b> {{bidding.dateEnd|date:"d M Y"}} @ {{ bidding.dateEnd|time:"h:i A" }}</p>
+        {% if user.is_authenticated %}
+          {% if property.status and property.status == "inactive" or not can_bid %}
+            <span class="bid--property-inactive">
+              Auction is over. Check out other listings
+              <a href="/listings">here</a>
+            </span>
+          {% elif payment == None %}
+            <span>
+              No Credit Card Attached. Please update payments method
+              <a href="/user/payments">here</a>
+            </span>
+          {% elif user.id == property.ownerID %}
+            <p class="user--is-owner">You cannot bid on your own property</p>
+          {% elif user.id == currentUser.userID %}
+            <p class="user--current-bid">You are currently the top bid!</p>
+          {% else %}
+            <form role="form" action="/bid/{{property.propertyID}}" method="post">
+              {% csrf_token %}
+              <input class="bid-field" id="bidPrice" type="number" name="bidPrice" value="{{ bidding.curPrice|add:'10'}}">
+              <button class="button--bid" type="submit">Bid</button>
+            </form>
+          {% endif %}
         {% endif %}
-      {% endif %}
-      {% if user.is_anonymous %}
-        <div class="bid-unavailable">
-          <span> Please
-          <a href="/login/?next=/property/{{property.propertyID}}">Login</a>
-          or
-          <a href="/register/?next=/property/{{property.propertyID}}">Register</a>
-          to continue
-          </span>
-        </div>
-      {% endif %}
+        {% if user.is_anonymous %}
+          <div class="bid-unavailable">
+            <span> Please
+            <a href="/login/?next=/property/{{property.propertyID}}">Login</a>
+            or
+            <a href="/register/?next=/property/{{property.propertyID}}">Register</a>
+            to continue
+            </span>
+          </div>
+        {% endif %}
+      </div>
       </div>
       <div class="property-map">
         <iframe width="100%" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q={{property.postalCode}}&key=AIzaSyDjayS9ongmbjub06TSFWNhqSfKb0xRB_A" allowfullscreen></iframe>

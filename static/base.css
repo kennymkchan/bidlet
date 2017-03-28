@@ -59,3 +59,42 @@ button {
 .gutter-bottom--half {
   margin-bottom: 30px;
 }
+
+/***************** Messages ********************/
+
+.message-title {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 5px;
+  color: #878787;
+  border-bottom: 1px solid #C1C1C1;
+  font-size: 20px;
+}
+
+.messages {
+  height: 100px;
+  z-index: 8;
+  border-radius: 7px;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25), 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: white;
+  width: 300px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 15px 10px;
+}
+
+.message {
+  margin-top: 20px;
+}
+
+.message-container {
+  position: relative;
+}
+
+.notification-close {
+  position: absolute;
+  top: -5px;
+  right: 10px;
+  cursor: pointer;
+}

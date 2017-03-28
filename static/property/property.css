@@ -46,7 +46,7 @@
 .property__price {
   font-weight: bold;
   position: absolute;
-  right: 15px;
+  left: 5px;
   top: 10px;
   color: #6aa74c;
   font-size: 30px;
@@ -55,9 +55,27 @@
 .property__price--label {
   font-weight: bold;
   position: absolute;
-  right: 15px;
+  left: 5px;
   top: 50px;
   color: #6aa74c;
+  font-size: 14px;
+}
+
+.property__price-auto {
+  font-weight: bold;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  color: #ffa500;
+  font-size: 30px;
+}
+
+.property__price--label-auto {
+  font-weight: bold;
+  position: absolute;
+  right: 15px;
+  top: 50px;
+  color: #ffa500;
   font-size: 14px;
 }
 
@@ -106,4 +124,42 @@
 
 .bidding-end {
   font-size: 12px;
+}
+
+.form--bid {
+  margin-top: 30px;
+}
+
+.button--sticky {
+  position: fixed;
+  cursor: pointer;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  z-index: 2;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15), 0 20px 20px 0 rgba(0, 0, 0, 0.05);
+  font-size: 27px;
+}
+
+.button--edit-property {
+  bottom: 30px;
+  right: 70px;
+  background-color: #90CAF9;
+}
+
+.edit-property {
+  text-decoration: none;
+  color: white;
+}
+
+.fa-pencil {
+  position: absolute;
+  right: 13px;
+  top: 12px;
+}
+
+.message-auction-over {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 20px;
 }

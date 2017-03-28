@@ -7,18 +7,22 @@
 
 
 {% block content %}
-  <!-- <a href="/user/edit">Edit Profile</a> -->
+  <a href="/user/edit">Edit Profile</a>
 
   <a href="/user/edit" class="back-to-profile">
     <i class="fa fa-arrow-left" aria-hidden="true"></i>
   </a>
 
   {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="message-{{message.tags}}">{{ message }}</li>
-      {% endfor %}
-    </ul>
+    <div class="messages" id="messages">
+      <div class="message-container">
+        <h3 class="message-title">Notifications</h3>
+        <i onclick="closeNotification()" class="fa fa-times fa-2x notification-close" aria-hidden="true"></i>
+        {% for message in messages %}
+          <p class="message message-{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
 
   <div class="credit-card">
