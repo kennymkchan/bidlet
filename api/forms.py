@@ -27,7 +27,7 @@ class CreatePropertyForm(forms.Form):
 	city = forms.CharField(initial="Waterloo", required=False)
 	postalCode = forms.CharField(initial="L3R6Y7")
 	suite = forms.IntegerField(initial=400, required=False)
-	image = forms.CharField(initial="http://www.hawkswap.com/wp-content/uploads/2012/08/438421.jpg", required=False)
+	image = forms.CharField(initial="https://d2lm6fxwu08ot6.cloudfront.net/img-thumbs/960w/P2KFFFSQ68.jpg", required=False)
 	startPrice = forms.DecimalField(initial=600)
 	autoWinPrice = forms.DecimalField(initial=800, required=False)
 	dateStart = forms.DateTimeField(initial=datetime.now())

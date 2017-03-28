@@ -1,16 +1,85 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block styles %}
-  <link rel="stylesheet" type="text/css" href="/static/property/listing.css" />
+  <link rel="stylesheet" type="text/css" href="/static/property/create.css" />
 {% endblock %}
 
 {% block content %}
 
-<div class="createProperty">
-  <h2>Create New Property</h2>
-  <form role="form" action="/property/create/" method="post">
-    {% csrf_token %} {{ CreatePropertyForm }}
-    <button type="submit">Submit</button>
-  </form>
+<div class="create-page">
+  <div class="create-form-container">
+    <form method="post" class="create-form">
+      <h2 class="create-header">Create Property</h2>
+      {% csrf_token %}
+      {% for error, message in form.errors.items %}
+        {% if error == "__all__"%}
+          <p>{{message}}</p>
+        {% endif %}
+      {% endfor %}
+
+      <label class="field-title">Title: </label>
+      {{ CreatePropertyForm.title.errors }}
+      {{ CreatePropertyForm.title|attr:"placeholder:Title"|add_class:"field--create" }}
+
+      <label class="field-title">Description: </label>
+      {{ CreatePropertyForm.description.errors }}
+      {{ CreatePropertyForm.description|attr:"placeholder:Description"|add_class:"field--create"}}
+
+      <label class="field-title">Address: </label>
+      {{ CreatePropertyForm.address.errors }}
+      {{ CreatePropertyForm.address|attr:"placeholder:Address"|add_class:"field--create" }}
+
+      <label class="field-title">Country: </label>
+      {{ CreatePropertyForm.country.errors }}
+      {{ CreatePropertyForm.country|attr:"placeholder:Country"|add_class:"field--create"}}
+
+      <label class="field-title">City: </label>
+      {{ CreatePropertyForm.city.errors }}
+      {{ CreatePropertyForm.city|attr:"placeholder:City"|add_class:"field--create" }}
+
+      <label class="field-title">Postal Code: </label>
+      {{ CreatePropertyForm.postalCode.errors }}
+      {{ CreatePropertyForm.postalCode|attr:"placeholder:Postal Code"|add_class:"field--create"}}
+
+      <label class="field-title">Suite Number:</label>
+      {{ CreatePropertyForm.suite.errors }}
+      {{ CreatePropertyForm.suite|attr:"placeholder:Suite Number"|add_class:"field--create"}}
+
+      <label class="field-title">Image URL: </label>
+      {{ CreatePropertyForm.image.errors }}
+      {{ CreatePropertyForm.image|attr:"placeholder:Image URL"|add_class:"field--create"}}
+
+      <label class="field-title">Start Price: </label>
+      {{ CreatePropertyForm.startPrice.errors }}
+      {{ CreatePropertyForm.startPrice|attr:"placeholder:Start Price"|add_class:"field--create"}}
+
+      <label class="field-title">Auto Win: </label>
+      {{ CreatePropertyForm.autoWinPrice.errors }}
+      {{ CreatePropertyForm.autoWinPrice|attr:"placeholder:Auto Win"|add_class:"field--create" }}
+
+      <label class="field-title">Auction Start Date: </label>
+      {{ CreatePropertyForm.dateStart.errors }}
+      {{ CreatePropertyForm.dateStart|attr:"placeholder:Auction Start Date"|add_class:"field--create"}}
+
+      <label class="field-title">Auction End Date: </label>
+      {{ CreatePropertyForm.dateEnd.errors }}
+      {{ CreatePropertyForm.dateEnd|attr:"placeholder:Auction End Date"|add_class:"field--create"}}
+
+      <label class="field-title">Unit Available Start: </label>
+      {{ CreatePropertyForm.availStart.errors }}
+      {{ CreatePropertyForm.availStart|attr:"placeholder:Unit Available Start"|add_class:"field--create"}}
+
+      <label class="field-title">Unit Available End: </label>
+      {{ CreatePropertyForm.availEnd.errors }}
+      {{ CreatePropertyForm.availEnd|attr:"placeholder:Unit Available End"|add_class:"field--create"}}
+
+      <label class="field-title">Number of rooms: </label>
+      {{ CreatePropertyForm.rooms.errors }}
+      {{ CreatePropertyForm.rooms|attr:"placeholder:Number of rooms"|add_class:"field--create"}}
+
+      <button class="button--create" type="submit" value="{{title}}">Create Property</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

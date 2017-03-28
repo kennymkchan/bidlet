@@ -4,29 +4,73 @@
   <link rel="stylesheet" type="text/css" href="/static/index.css" />
 {% endblock %}
 
+{% block hero %}
+  <div class="hero--index">
+    <div class="hero--content-container">
+      <div class="hero">
+        <h1 class="hero-heading">
+          Sublet? Get connected to <br/> your next home on Bidlet
+        </h1>
+        <h2 class="hero-subhead gutter-bottom">
+          Finding a sublet has never been this simple
+        </h2>
+      </div>
+      <div class="fields--cta">
+        <a href="/register">
+          <button class="button--cta button--get-started" type="submit">Get Started</button>
+        </a>
+        <a href="listings">
+          <button class="button--cta button--learn-more" type="submit">Explore</button>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
-  <div class="home-container">
-    <div class="hero">
-      <h1 class="hero-heading">
-        Sublet? Get connected to <br/> your next home on Bidlet
-      </h1>
-      <h2 class="hero-subhead gutter-bottom">
-        Finding a sublet has never been this simple
-      </h2>
+
+  <h2 class="section--heading">Bidlet is making it's name across the globe</h2>
+
+  <div class="section--testimonials">
+    <div class="home--testimonials">
+      {% for x in "xxxxx"%}
+        <i class="fa fa-star" aria-hidden="true"></i>
+      {% endfor %}
+      <h3 class="testimonial-header">Out of this world!</h3>
+      <p class="testimonial-content">
+        Simply amazing! Bidlet is probably one of the best solutions
+        I've ever heard of.
+      </p>
+      <p class="testimoniee">
+        - Susan Giang, 3B SYDE
+      </p>
     </div>
-
-    <!-- ADD DJANGO FORM HERE -->
-    <form class="search-form gutter-bottom">
-      <input class="search--home-field field--where" type="text" placeholder="Where">
-      <input class="search--home-field field--when" type="text" placeholder="When">
-      <input class="search--home-field field--number" placeholder="How many">
-      <button class="button" type="submit">Search</button>
-    </form>
-
-    <div class="cta-container">
-      <!-- <a class="button button--cta" href="/register">Get Started</a> -->
-      <!-- <a class="button button--cta" href="/register">Login</a> -->
+    <div class="home--testimonials">
+      {% for x in "xxxxx"%}
+        <i class="fa fa-star" aria-hidden="true"></i>
+      {% endfor %}
+      <h3 class="testimonial-header">Love this app so much!</h3>
+      <p class="testimonial-content">
+        The concept is really neat and the site works great. 5/5 would use
+        this site again.
+      </p>
+      <p class="testimoniee">
+        - Anon, Canada
+      </p>
     </div>
-
+    <div class="home--testimonials">
+      {% for x in "xxxxx"%}
+        <i class="fa fa-star" aria-hidden="true"></i>
+      {% endfor %}
+      <h3 class="testimonial-header">Beta was awesome</h3>
+      <p class="testimonial-content">
+        AirBnB should have done this a lot quicker. This application
+        makes it so easy to find the right place at the right time.
+        I am definitely going to use this again!
+      </p>
+      <p class="testimoniee">
+        - User
+      </p>
+    </div>
   </div>
 {% endblock %}

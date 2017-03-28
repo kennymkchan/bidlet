@@ -4,11 +4,14 @@ from django.contrib.auth import (
     login,
     logout,
 )
+from rest_framework.response import Response
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.db.models import Q
+from functools import reduce
 from .forms import (
     AccountLoginForm,
     AccountRegistrationForm,
@@ -16,6 +19,7 @@ from .forms import (
     AccountEditForm,
     PaymentForm
 )
+from api.forms import SearchPropertyForm
 from api.models import Bidders, Property
 from users.models import Account
 from django.conf import settings
@@ -65,6 +69,7 @@ def profile_edit_view(request):
 
         # Reset the form to remove all the errors
         accountEditForm = AccountEditForm(request.POST or None, request.FILES or None)
+        messages.success(request, 'Profile Information Updated!')
         return redirect('/user/edit')
 
     context = {

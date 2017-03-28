@@ -14,7 +14,6 @@
         {% csrf_token %}
 
         {% for error, message in form.errors.items %}
-          <!-- for validation errors thrown -->
           {% if error == "__all__"%}
             <p>{{message}}</p>
           {% endif %}
@@ -36,8 +35,9 @@
         {{ user_form.last_name|attr:"placeholder:Last Name"|add_class:"field--register"}}
         {{ account_form.birth_date.errors }}
         {{ account_form.birth_date|attr:"placeholder:Date of Birth"|add_class:"field--register"}}
-
         <button class="button--register" type="submit" value="{{title}}">Register</button>
+        <hr class="register-line">
+        <span class="register-disclaimer">By singing up, you agree to all our terms and conditions</span>
       </form>
     </div>
   </div>
