@@ -4,11 +4,14 @@ from django.contrib.auth import (
     login,
     logout,
 )
+from rest_framework.response import Response
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.db.models import Q
+from functools import reduce
 from .forms import (
     AccountLoginForm,
     AccountRegistrationForm,
@@ -16,10 +19,47 @@ from .forms import (
     AccountEditForm,
     PaymentForm
 )
+from api.forms import SearchPropertyForm
 from api.models import Bidders, Property
 from users.models import Account
 from django.conf import settings
 import stripe
+
+# def index_view(request):
+#     form = SearchPropertyForm(request.POST or None)
+#     if form.is_valid():
+#         andPredicates = []
+#         city = form.cleaned_data['city']
+#         rooms = form.cleaned_data['rooms']
+#         availStart = form.cleaned_data['availStart']
+#
+#         if city:
+#             andPredicates.append(('city__icontains', city))
+#         if rooms:
+#             andPredicates.append(('rooms__exact', rooms))
+#         if availStart:
+#             andPredicates.append(('availStart__lte', availStart))
+#
+#         andQuery = [Q(x) for x in andPredicates]
+#
+#         if not andQuery:
+#             listings = Property.objects.all().exclude(status="inactive")
+#         else:
+#             if andQuery:
+#                 and_listings = Property.objects.filter(
+#                     reduce(operator.and_, andQuery)).exclude(status="inactive")
+#                 listings = and_listings
+#         search = {"AND": andPredicates}
+#
+#     context = {
+#         # 'listings': listings,
+#         'SearchPropertyForm': SearchPropertyForm,
+#         # 'search': search,
+#     }
+#
+#     return Response(context)
+
+
 
 @login_required(login_url="/login/")
 def home_view(request):

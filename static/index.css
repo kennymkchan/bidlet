@@ -38,9 +38,24 @@
 }
 
 .hero--content-container {
-  padding-top: 40px;
+  padding-top: 80px;
   width: 100%;
   text-align: center;
+}
+
+.fields--cta {
+  margin-top: 60px;
+}
+
+.button--cta {
+  padding: 15px 30px;
+  font-size: 15px;
+  /*text-transform: uppercase;*/
+  margin: 0 15px;
+}
+
+.button--cta:hover {
+  background-color: #4A7435;
 }
 
 .section--heading {

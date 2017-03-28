@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 from users.views import (
+    # index_view,
     login_view,
     logout_view,
     registration_view,
