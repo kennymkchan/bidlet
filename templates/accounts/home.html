@@ -5,13 +5,9 @@
 {% endblock %}
 
 {% block content %}
-  <h2>Homepage</h2>
-
-  <p> {{account.user_id}} </p>
-
   <p>Hello {{ user.first_name}}! </p>
 
-  <h2><b>Finished Auctions - Owned Properties</b></h2>
+  <h2><b>Recently Finished Auctions</b></h2>
   <div class="sublets">
     {% for sublet in properties %}
       {% if user.id == sublet.tenantID %}
@@ -33,7 +29,7 @@
     {% endfor %}
   </div>
 
-  <h2><b>Watch List - Currently active</b></h2>
+  <h2><b>Currently Watching</b></h2>
   <div class="sublets">
     {% for sublet in properties %}
       {% if sublet.status == 'active' or sublet.status == None %}

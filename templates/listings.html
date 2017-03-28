@@ -1,27 +1,84 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="/static/property/listing.css" />
 {% endblock %}
 
+{% block hero %}
+  <div class="hero--listing">
+    <div class="hero--content-container">
+      <h1 class="hero--heading">Find your dream place</h1>
+      <form role="form" class="" action="/listings/" method="post">
+        <div class="hero--search">
+          {% csrf_token %}
+          <div class="search-container">
+            {{ SearchPropertyForm.keyword|attr:"placeholder:Search for keywords . . ."|add_class:"field--hero-cta field--filter" }}
+            <button type="submit" class="button--keyword">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
+
+  <div class="page-overlay"></div>
+
+  <div onclick="showFilterMenu()" class="button--sticky button--filter-open">
+    <i class="fa fa-filter" aria-hidden="true"></i>
+  </div>
+
+  <div class="full-background"></div>
+
   {% if user.is_authenticated%}
-    <a href="/property/create">Create a listing</a>
-  {% elif user.is_anonymous %}
+    <a href="/property/create">
+      <div class="button--sticky button--add-property">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </div>
+    </a>
+  {% endif %}
+
+  {% if user.is_anonymous %}
     <span>
       <a href="/login">Login</a> or <a href="/register">Register</a>
       to add a property
     </span>
   {% endif %}
-  <h2>Search for Listings</h2>
-  <div class="query">
-    <form role="form" action="/listings/" method="post">
-      {% csrf_token %} {{ SearchPropertyForm }}
-      <button type="submit">Submit</button>
-    </form>
+  <div class="filter-wrapper">
+    <div class="filter-page">
+      <div class="query filter-form-container">
+        <i onclick="closeMenu()" class="fa fa-times" aria-hidden="true"></i>
+        <form role="form" class="filter-form" action="/listings/" method="post">
+          <h2 class="filter-header">Filter</h2>
+          {% csrf_token %}
+          {% for error, message in form.errors.items %}
+            {% if error == "__all__"%}
+              <p>{{message}}</p>
+            {% endif %}
+          {% endfor %}
+
+          {{ SearchPropertyForm.city.errors }}
+          {{ SearchPropertyForm.city|attr:"placeholder:City"|add_class:"field--filter" }}
+          {{ SearchPropertyForm.rooms.errors }}
+          {{ SearchPropertyForm.rooms|attr:"placeholder:Rooms"|add_class:"field--filter"}}
+          {{ SearchPropertyForm.availStart.errors }}
+          {{ SearchPropertyForm.availStart|attr:"placeholder:Available Start Date"|add_class:"field--filter" }}
+          {{ SearchPropertyForm.availEnd.errors }}
+          {{ SearchPropertyForm.availEnd|attr:"placeholder:Available End Date"|add_class:"field--filter"}}
+          {{ SearchPropertyForm.priceUnder.errors }}
+          {{ SearchPropertyForm.priceUnder|attr:"placeholder:Price Under"|add_class:"field--filter"}}
+          {{ SearchPropertyForm.priceOver.errors }}
+          {{ SearchPropertyForm.priceOver|attr:"placeholder:Price Over"|add_class:"field--filter"}}
+          <button type="submit" class="button--filter">Submit</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <h2>Listings</h2>
-  <h3>{{ search|default:"All" }}</h3>
+  <h2 class="listings-subhead">Results</h2>
   <div class="listings">
     {% for listing in listings %}
     <a href="/property/{{ listing.propertyID }}/">
@@ -29,18 +86,25 @@
         <div class="property__image">
           <img src="{{ listing.image}}">
         </div>
-        <span class="property__price">${{ listing.curPrice|default:listing.startPrice|floatformat:"0"}} CAD</span>
         <div class="property__title">{{ listing.title}}</div>
         {% if listing.rooms %}
-        <div class="property__info">{{ listing.rooms}} Rooms</div>
+          <div class="property__info">{{ listing.rooms}} Rooms</div>
         {% endif %}
         {% if listing.availStart and listing.availEnd %}
         	<div class="property__info">Available:{{ listing.availStart|date:"M Y"}}-{{ listing.availEnd|date:"M Y"}}</div>
         {% endif %}
         <div class="property__info">{{ listing.city}}, {{ listing.country }}</div>
         <div class="property__info">{{ listing.address }}</div>
+        <span class="property__price">${{ listing.curPrice|default:listing.startPrice|floatformat:"0"}} CAD</span>
       </div>
     </a>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="/static/javascript/listing.js"></script>
 {% endblock %}

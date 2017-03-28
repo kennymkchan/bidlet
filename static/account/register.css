@@ -37,9 +37,26 @@
   background: #6aa74c;
   width: 100%;
   margin-top: 15px;
+  margin-bottom: 15px;
   padding: 15px;
   color: #FFFFFF;
   font-size: 14px;
   cursor: pointer;
   text-transform: uppercase;
+}
+
+.register-line {
+  display: block;
+  height: 1px;
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid #AAAAAA;
+  padding: 0;
+}
+
+.register-disclaimer {
+  padding-top: 10px;
+  font-size: 11px;
+  text-align: left;
+  color: #6aa74c;
 }
