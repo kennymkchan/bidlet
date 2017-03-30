@@ -13,6 +13,8 @@ from users.models import Account
 from django.contrib.auth.decorators import login_required
 from .serializers import PropertySerializer, BiddingSerializer, BiddersSerializer
 from datetime import datetime, timezone
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.conf import settings
 import stripe
 
@@ -288,6 +290,7 @@ class propertyDetails(APIView):
 def chargeCustomer(request, userID, autoWin, propertyID):
     account_queryset = Account.objects.get(user_id=userID)
     stripe.api_key = settings.STRIPE_KEY
+    user = request.user
 
     # The amount we charge for deposit will be equal to half the
     # bid price. * 100 because we need this value in cents
@@ -295,6 +298,7 @@ def chargeCustomer(request, userID, autoWin, propertyID):
     # Stripe does not take decimals!
     value = int(autoWin * 100 / 2)
 
+    print(value)
     try:
         # Charging the customer
         stripe.Charge.create(
@@ -302,6 +306,8 @@ def chargeCustomer(request, userID, autoWin, propertyID):
             currency="cad",
             customer=account_queryset.stripe_id,
         )
+        sendMail(user.email, user.first_name)
+
         messages.success(
             request, 'Congratulations! You have won the auction!')
         Property.objects.filter(propertyID=propertyID).update(
@@ -311,3 +317,27 @@ def chargeCustomer(request, userID, autoWin, propertyID):
         messages.error(
             request, "Something went wrong, unable to charge credit card")
         return redirect('/property/' + str(propertyID))
+
+def sendMail(email, first):
+
+    fields = {
+        'email': email,
+        'first_name': first,
+    }
+
+    message_plain = render_to_string('email/auction-won.txt', fields)
+    message_html = render_to_string('email/auction-won.html', fields)
+    subject_title = "Congratulations! You've just won an auction"
+
+    try:
+        send_mail(
+            subject_title,
+            message_plain,
+            settings.EMAIL_HOST_USER,
+            # replce with email from params
+            ['kennykitchan@gmail.com'],
+            # Allows us to send HTML template emails
+            html_message=message_html,
+        )
+    except:
+        print("Email unable to send")
