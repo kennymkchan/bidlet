@@ -35,58 +35,13 @@ class Listings(APIView):
     def post(self, request):
         form = SearchPropertyForm(request.POST or None)
         if form.is_valid():
-            andPredicates = []
-            orPredicates = []
-            country = form.cleaned_data['country']
-            city = form.cleaned_data['city']
-            keyword = form.cleaned_data['keyword']
-            rooms = form.cleaned_data['rooms']
-            availStart = form.cleaned_data['availStart']
-            availEnd = form.cleaned_data['availEnd']
-            priceUnder = form.cleaned_data['priceUnder']
-            priceOver = form.cleaned_data['priceOver']
-
-            if country:
-                andPredicates.append(('country__icontains', country))
-            if city:
-                andPredicates.append(('city__icontains', city))
-            if keyword:
-                orPredicates.append(('title__icontains', keyword))
-                orPredicates.append(('description__icontains', keyword))
-            if rooms:
-                andPredicates.append(('rooms__exact', rooms))
-            if availStart:
-                andPredicates.append(('availStart__lte', availStart))
-            if availEnd:
-                andPredicates.append(('availEnd__gte', availEnd))
-            if priceUnder:
-                andPredicates.append(('curPrice__lte', priceUnder))
-            if priceOver:
-                andPredicates.append(('curPrice__gte', priceOver))
-
-            andQuery = [Q(x) for x in andPredicates]
-            orQuery = [Q(x) for x in orPredicates]
-
-            if not andQuery and not orQuery:
-                listings = Property.objects.all().exclude(status="inactive")
-            else:
-                if andQuery:
-                    and_listings = Property.objects.filter(
-                        reduce(operator.and_, andQuery)).exclude(status="inactive")
-                    listings = and_listings
-                if orQuery:
-                    or_listings = Property.objects.filter(
-                        reduce(operator.or_, orQuery)).exclude(status="inactive")
-                    listings = or_listings
-                if andQuery and orQuery and and_listings and or_listings:
-                    listings = and_listings & or_listings
-            search = {"AND": andPredicates, "OR": orPredicates}
+            filters = getFilters(form)
 
         context = {
-            'listings': listings,
+            'listings': filters["listings"],
             'CreatePropertyForm': CreatePropertyForm,
             'SearchPropertyForm': SearchPropertyForm,
-            'search': search,
+            'search': filters["search"],
         }
 
         return Response(context)
@@ -341,3 +296,54 @@ def sendMail(email, first):
         )
     except:
         print("Email unable to send")
+
+def getFilters(form):
+
+    andPredicates = []
+    orPredicates = []
+    country = form.cleaned_data['country']
+    city = form.cleaned_data['city']
+    keyword = form.cleaned_data['keyword']
+    rooms = form.cleaned_data['rooms']
+    availStart = form.cleaned_data['availStart']
+    availEnd = form.cleaned_data['availEnd']
+    priceUnder = form.cleaned_data['priceUnder']
+    priceOver = form.cleaned_data['priceOver']
+
+    if country:
+        andPredicates.append(('country__icontains', country))
+    if city:
+        andPredicates.append(('city__icontains', city))
+    if keyword:
+        orPredicates.append(('title__icontains', keyword))
+        orPredicates.append(('description__icontains', keyword))
+    if rooms:
+        andPredicates.append(('rooms__exact', rooms))
+    if availStart:
+        andPredicates.append(('availStart__lte', availStart))
+    if availEnd:
+        andPredicates.append(('availEnd__gte', availEnd))
+    if priceUnder:
+        andPredicates.append(('curPrice__lte', priceUnder))
+    if priceOver:
+        andPredicates.append(('curPrice__gte', priceOver))
+
+    andQuery = [Q(x) for x in andPredicates]
+    orQuery = [Q(x) for x in orPredicates]
+
+    if not andQuery and not orQuery:
+        listings = Property.objects.all().exclude(status="inactive")
+    else:
+        if andQuery:
+            and_listings = Property.objects.filter(
+                reduce(operator.and_, andQuery)).exclude(status="inactive")
+            listings = and_listings
+        if orQuery:
+            or_listings = Property.objects.filter(
+                reduce(operator.or_, orQuery)).exclude(status="inactive")
+            listings = or_listings
+        if andQuery and orQuery and and_listings and or_listings:
+            listings = and_listings & or_listings
+    search = {"AND": andPredicates, "OR": orPredicates}
+
+    return {"listings": listings, "search": search}
