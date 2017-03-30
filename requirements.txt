@@ -3,3 +3,4 @@ django-webpack-loader==0.2.4
 djangorestframework==3.3.2
 stripe
 django-widget-tweaks
+dateutil

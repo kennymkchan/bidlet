@@ -82,12 +82,13 @@ class AccountRegistrationForm(forms.ModelForm):
         birthday = self.cleaned_data.get('birth_date')
         today = date.today()
 
-        if (today.year - birthday.year) < 16:
-            # They are older than 16
-            if ((today.month, today.day) < (birthday.month, birthday.day)):
-                return birthday
-            else:
-                raise forms.ValidationError("You must be older than 16 to use this site")
+        # True or valse
+        monthDay = ((today.month, today.day) < (birthday.month, birthday.day));
+
+        age = (today.year - birthday.year) - monthDay
+
+        if age < 16:
+            raise forms.ValidationError("You must be older than 16 to use this site")
         return birthday
 
 
