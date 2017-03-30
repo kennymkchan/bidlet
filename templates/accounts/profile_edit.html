@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block styles %}
+  <link rel="stylesheet" type="text/css" href="/static/account/profile-edit.css" />
 {% endblock %}
 
-
 {% block content %}
-  <h2>Welcome to profile edit!</h2>
 
   {% if messages %}
     <div class="messages" id="messages">
@@ -19,16 +19,35 @@
     </div>
   {% endif %}
 
-  <h3>Here, you can find the ability to edit your own account information</h3>
+  <div class="profile-edit-page">
+    <form method="post" enctype="multipart/form-data" class="profile-edit-form">
+      <h1 class="profile-edit-header">Profile Edit</h1>
+      {% csrf_token %}
+      <span>Date of Birth:</span>
+      {{ accountEditForm.birth_date.errors }}
+      {{ accountEditForm.birth_date|attr:"placeholder:Date of Birth"|add_class:"field--profile-edit" }}
 
-  <a href="/user/payments">Payment Methods</a>
+      <span>Phone number:</span>
+      {{ accountEditForm.phone_number.errors }}
+      {{ accountEditForm.phone_number|attr:"placeholder:Phone number"|add_class:"field--profile-edit"}}
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ accountEditForm.as_p }}
-    <button type="submit" value="{{title}}">Save</button>
-    <a href="/home"><button type="button" value="{{title}}">Return to Profile</button></a>
-  </form>
+      <span>Description:</span>
+      {{ accountEditForm.profile_description.errors }}
+      {{ accountEditForm.profile_description|attr:"placeholder:Description"|add_class:"field--profile-edit" }}
 
+      <span>Preferred Language:</span>
+      {{ accountEditForm.preferred_language.errors }}
+      {{ accountEditForm.preferred_language|attr:"placeholder:Preferred Language"|add_class:"field--profile-edit" }}
 
+      <span>Preferred Currency:</span>
+      {{ accountEditForm.preferred_currency.errors }}
+      {{ accountEditForm.preferred_currency|attr:"placeholder:Preferred Currency"|add_class:"field--profile-edit"}}
+
+      <div class="button-container">
+        <button class="button--save" type="submit" value="{{title}}">Save</button>
+        <a class="button--return" href="/home"><button type="button" value="{{title}}">Return to Profile</button></a>
+      </div>
+      <p class="payment-reference"><a href="/user/payments/">Edit your payment information here</a></p>
+    </form>
+  </div>
 {% endblock %}
